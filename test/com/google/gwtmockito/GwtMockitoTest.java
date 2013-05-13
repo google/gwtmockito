@@ -28,7 +28,14 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.i18n.client.BidiPolicy;
 import com.google.gwt.i18n.client.Messages;
+import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.resources.client.DataResource;
+import com.google.gwt.resources.client.ExternalTextResource;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ResourceCallback;
+import com.google.gwt.resources.client.ResourceException;
+import com.google.gwt.resources.client.TextResource;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.safehtml.shared.SafeUri;
@@ -293,6 +300,38 @@ public class GwtMockitoTest {
     Assert.assertEquals("mocked", packagePrivateClass.doStuff());
   }
 
+  @Test
+  public void testShouldMockClientBundles() throws Exception {
+    SomeClientBundle clientBundle = GWT.create(SomeClientBundle.class);
+
+    // CSS resources should be faked
+    assertEquals("style1", clientBundle.css().style1());
+
+    // Other internal resources should return their names from getSafeUri or getText
+    assertEquals("data", clientBundle.data().getSafeUri().asString());
+    assertEquals(0, clientBundle.image().getHeight());
+    assertEquals(0, clientBundle.image().getLeft());
+    assertEquals("image", clientBundle.image().getSafeUri().asString());
+    assertEquals(0, clientBundle.image().getTop());
+    assertEquals(0, clientBundle.image().getWidth());
+    assertEquals(false, clientBundle.image().isAnimated());
+    assertEquals("text", clientBundle.text().getText());
+
+    // External resources should return their name in a callback
+    final StringBuilder result = new StringBuilder();
+    clientBundle.externalText().getText(new ResourceCallback<TextResource>() {
+      @Override
+      public void onSuccess(TextResource resource) {
+        result.append(resource.getText());
+      }
+      @Override
+      public void onError(ResourceException e) {
+        throw new RuntimeException(e);
+      }
+    });
+    assertEquals("externalText", result.toString());
+  }
+
   static class PackagePrivateClass {
     String doStuff() {
       return "not mocked";
@@ -322,6 +361,14 @@ public class GwtMockitoTest {
     String style2();
   }
   
+  interface SomeClientBundle extends ClientBundle {
+    SampleCss css();
+    DataResource data();
+    ExternalTextResource externalText();
+    ImageResource image();
+    TextResource text();
+  }
+
   private static class SampleWidget extends Composite {
 
     interface MyUiBinder extends UiBinder<Widget, SampleWidget> {}

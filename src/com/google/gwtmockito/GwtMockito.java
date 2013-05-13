@@ -20,9 +20,11 @@ import static org.mockito.Mockito.mock;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWTBridge;
 import com.google.gwt.i18n.client.Messages;
+import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwtmockito.fakes.FakeClientBundleProvider;
 import com.google.gwtmockito.fakes.FakeMessagesProvider;
 import com.google.gwtmockito.fakes.FakeProvider;
 import com.google.gwtmockito.fakes.FakeUiBinderProvider;
@@ -90,10 +92,11 @@ public class GwtMockito {
   public static void initMocks(Object owner) {
     // Create a new bridge and register built-in type providers
     bridge = new Bridge();
-    useProviderForType(UiBinder.class, new FakeUiBinderProvider());
-    useProviderForType(Messages.class, new FakeMessagesProvider<Messages>());
+    useProviderForType(ClientBundle.class, new FakeClientBundleProvider());
     useProviderForType(CssResource.class, new FakeMessagesProvider<CssResource>());
+    useProviderForType(Messages.class, new FakeMessagesProvider<Messages>());
     useProviderForType(SafeHtmlTemplates.class, new FakeMessagesProvider<SafeHtmlTemplates>());
+    useProviderForType(UiBinder.class, new FakeUiBinderProvider());
 
     // Install the bridge and populate mock fields
     boolean success = false;
