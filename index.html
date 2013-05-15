@@ -1,0 +1,290 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>GwtMockito by google</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">GwtMockito</h1>
+        <p class="header">Better GWT unit testing</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/google/gwtmockito/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/google/gwtmockito/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/google/gwtmockito">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/google">google</a></p>
+
+
+      </header>
+      <section>
+        <h2>What is GwtMockito?</h2>
+
+<p>Testing GWT applications using <code>GWTTestCase</code> can be a pain - it's slower than
+using pure Java tests, and you can't use reflection-based tools like mocking
+frameworks. But if you've tried to test widgets using normal test cases, you've
+probably run into this error:</p>
+
+<pre><code>ERROR: GWT.create() is only usable in client code!  It cannot be called,
+for example, from server code. If you are running a unit test, check that 
+your test case extends GWTTestCase and that GWT.create() is not called
+from within an initializer or constructor.
+</code></pre>
+
+<p>GwtMockito solves this and other GWT-related testing problems by allowing you
+to call GWT.create from JUnit tests, returning <a href="https://code.google.com/p/mockito/">Mockito</a> mocks.</p>
+
+<h2>How do I use it?</h2>
+
+<p>Getting started with GwtMockito using Junit 4 is easy. Just annotate your test
+with <code>@RunWith(GwtMockitoTestRunner.class)</code>, then any calls to <code>GWT.create</code>
+encountered will return Mockito mocks instead of throwing exceptions:</p>
+
+<pre><code>@RunWith(GwtMockitoTestRunner.class)
+public class MyTest {
+  @Test
+  public void shouldReturnMocksFromGwtCreate() {
+    Label myLabel = GWT.create(Label.class);
+    when(myLabel.getText()).thenReturn("some text");
+    assertEquals("some text", myLabel.getText());
+  }
+}
+</code></pre>
+
+<p>GwtMockito also creates fake implementations of all UiBinders that automatically
+populate <code>@UiField</code>s with Mockito mocks. Suppose you have a widget that looks
+like this:</p>
+
+<pre><code>class MyWidget extends Composite {
+  interface MyUiBinder extends UiBinder&lt;Widget, MyWidget&gt; {}
+  private final MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+
+  @UiField Label numberLabel;
+  private final NumberFormatter formatter;
+
+  MyWidget(NumberFormatter formatter) {
+    this.formatter = formatter;
+    initWidget(uiBinder.createAndBindUi(this);
+  }
+
+  void setNumber(int number) {
+    numberLabel.setText(formatter.format(number));
+  }
+}
+</code></pre>
+
+<p>When <code>createAndBindUi</code> is called, GwtMockito will automatically populate 
+<code>numberLabel</code> with a mock object. Since <code>@UiField</code>s are package-visible, they 
+can be read from your unit tests, which lets you test this widget as follows:</p>
+
+<pre><code>@RunWith(GwtMockitoTestRunner.class)
+public class MyWidgetTest extends TestCase {
+
+  @Mock NumberFormatter formatter;
+  private MyWidget widget;
+
+  @Before
+  public void setUp() {
+    widget = new MyWidget(formatter);
+  }
+
+  @Test
+  public void shouldFormatNumber() {
+    when(formatter.format(5)).thenReturn("5.00");
+    widget.setNumber(5);
+    verify(widget.numberLabel).setText("5.00");
+  }
+}
+</code></pre>
+
+<p>Note that GwtMockito supports the <code>@Mock</code> annotation from Mockito, allowing 
+standard Mockito mocks to be mixed with mocks created by GwtMockito.</p>
+
+<p>That's all you need to know to get started - read on if you're interested in
+hearing about some advanced features.</p>
+
+<h3>Accessing the mock returned from GWT.create</h3>
+
+<p>Returning mocks from <code>GWT.create</code> isn't very useful if you don't have any way to
+verify or set behaviors on them. You can do this by annotating a field in your 
+test with <code>@GwtMock</code> - this will cause all calls to <code>GWT.create</code> for that type
+to return a mock stored in that field, allowing you to reference it in your
+test. So if you have a class that looks like</p>
+
+<pre><code>class MyClass {
+  MyClass() {
+    SomeInterface myInterface = GWT.create(SomeInterface.class);
+    myInterface.setSomething(true);
+  }
+}
+</code></pre>
+
+<p>then you can verify that it works correctly by writing a test that looks like
+this:</p>
+
+<pre><code>@RunWith(GwtMockitoTestRunner.class)
+public class MyClassTest {
+  @GwtMock SomeInterface mockInterface;
+
+  @Test
+  public void constructorShouldSetSomething() {
+    new MyClass();
+    verify(mockInterface).setSomething(true);
+  }
+}
+</code></pre>
+
+<h3>Returning fake objects</h3>
+
+<p>By default, GwtMockito will return fake implementations (which don't require you
+to specify mock behavior) for any classes extending the following types:</p>
+
+<ul>
+<li>UiBinder</li>
+<li>ClientBundle</li>
+<li>Messages</li>
+<li>CssResource</li>
+<li>SafeHtmlTemplates</li>
+</ul><p>You can add fakes for additional types by invoking 
+<code>GwtMockito.useProviderForType(Class, FakeProvider)</code> in your <code>setUp</code> method. 
+This will cause all calls to <code>GWT.create</code> for the given class or its subclasses
+to invoke the given <code>FakeProvider</code> to determine what to return. See the
+<a href="TODO">javadoc reference</a> for more details.</p>
+
+<h3>Mocking final classes and methods</h3>
+
+<p>Mockito does not normally allow final classes and methods to be mocked. This 
+poses problems in GWT since <a href="https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay">JavaScript overlay types</a> (which include 
+<code>Element</code> and its subclasses) require all methods to be final. Fortunately,
+GwtMockito does some classloader black magic to remove all final modifiers from
+classes and interfaces, so the following test will pass:</p>
+
+<pre><code>@RunWith(GwtMockitoTestRunner.class)
+public class MyTest {
+  @Mock Element element;
+
+  @Test
+  public void shouldReturnMocksFromGwtCreate() {
+    when(element.getClassName()).thenReturn("mockClass");
+    assertEquals("mockClass", myLabel.getClassName());
+  }
+}
+</code></pre>
+
+<p>As long as your test uses <code>GwtMockitoTestRunner</code>, it is possible to mock any
+final methods.</p>
+
+<h3>Dealing with native methods</h3>
+
+<p>Under normal circumstances, JUnit tests will fail with an <code>UnsatisfiedLinkError</code> when encountering a native JSNI method. GwtMockito works around this problem
+using more classloader black magic to provide no-op implementations for all
+native methods using the following rules:</p>
+
+<ul>
+<li>
+<code>void</code> methods do nothing.</li>
+<li>Methods returning primitive types return the default value for that type (0,
+false, etc.)</li>
+<li>Methods returning <code>String</code>s return the empty string.</li>
+<li>Methods returning other objects return a mock of that object configured with
+<code>RETURNS_MOCKS</code>.</li>
+</ul><p>These rules allow many tests to continue to work even when calling incindental
+native methods. Note that this can be dangerous - a JSNI method that normally
+always returns <code>true</code> would always return <code>false</code> when stubbed by GwtMockito.
+As much as possible, you should isolate code that depends on JSNI into its own
+class, <a href="http://en.wikipedia.org/wiki/Dependency_injection">inject</a> that class into yours, and test the factored-out class using
+<code>GWTTestCase</code>.</p>
+
+<h3>Support for JUnit 3 and other tests that can't use custom runners</h3>
+
+<p>Though <code>GwtMockitoTestRunner</code> is the easiest way to use GwtMockito, it won't
+work if you're using JUnit 3 or rely on another custom test runner. In these
+situations, you can still get most of the benefit of GwtMockito by calling
+<code>GwtMockito.initMocks</code> directly. A test written in this style looks like this:</p>
+
+<pre><code>public class MyWidgetTest extends TestCase {
+
+  private MyWidget widget;
+
+  @Override
+  public void setUp() {
+    super.setUp();
+    GwtMockito.initMocks(this);
+    widget = new MyWidget() {
+      protected void initWidget(Widget w) {
+        // Disarm for testing
+      }
+    };
+  }
+
+  @Override
+  public void tearDown() {
+    super.tearDown();
+    GwtMockito.tearDown();
+  }
+
+  public void testSomething() {
+    // Test code goes here
+  }
+}
+</code></pre>
+
+<p>The test must explicitly call <code>initMocks</code> during its setup and <code>tearDown</code> when
+it is being teared down, or else state can leak between tests. When 
+instantiating a widget, the test must also subclass it and override initWidget
+with a no-op implementation, or else it will fail when this method attempts to
+call Javascript. Note that when testing in this way the features described in
+"Mocking final classes and methods" and "Dealing with native methods" won't
+work - there is no way to mock final methods or automatically replace native
+methods without using <code>GwtMockitoTestRunner</code>.</p>
+
+<h2>How do I install it?</h2>
+
+<p>A Maven repository will be available soon. In the meantime, do the following:</p>
+
+<ol>
+<li>Install the jars for the latest versions of <a href="https://code.google.com/p/mockito/downloads/list">Mockito</a> and <a href="http://www.jboss.org/javassist/downloads">Javassist</a>
+ in your classpath.</li>
+<li>Download the GwtMockito jar from <a href="TODO">here</a> or check it out directly using 
+ git from <a href="https://github.com/google/gwtmockito.git">https://github.com/google/gwtmockito.git</a>.</li>
+<li>Start writing new tests or annotate existing ones with
+ <code>@RunWith(GwtMockitoTestRunner.class)</code>.</li>
+</ol><h2>Where can I learn more?</h2>
+
+<ul>
+<li>For more details on the GwtMockito API, consult the <a href="TODO">Javadoc</a>
+</li>
+<li>For an example of using GwtMockito to test some example classes, see the
+<a href="TODO">sample app</a>.</li>
+</ul>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		          <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-40935229-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
