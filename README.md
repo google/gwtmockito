@@ -225,7 +225,7 @@ A Maven repository will be available soon. In the meantime, do the following:
     [sample app][9].
 
 [1]: https://code.google.com/p/mockito/
-[2]: http://google.github.io/gwtmockito/javadoc/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class, com.google.gwtmockito.fakes.FakeProvider)
+[2]: http://google.github.io/gwtmockito/javadoc/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class,%20com.google.gwtmockito.fakes.FakeProvider)
 [3]: https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay
 [4]: http://en.wikipedia.org/wiki/Dependency_injection
 [5]: https://code.google.com/p/mockito/downloads/list
