@@ -230,6 +230,6 @@ A Maven repository will be available soon. In the meantime, do the following:
 [4]: http://en.wikipedia.org/wiki/Dependency_injection
 [5]: https://code.google.com/p/mockito/downloads/list
 [6]: http://www.jboss.org/javassist/downloads
-[7]: TODO
+[7]: https://github.com/google/gwtmockito/wiki/jars/gwtmockito-1.0.0.jar
 [8]: http://google.github.io/gwtmockito/javadoc/
 [9]: TODO
