@@ -60,6 +60,10 @@ import java.util.Map.Entry;
  *   <li> UiBinder: uses a fake that populates all UiFields with GWT.create'd
  *        widgets, allowing them to be mocked like other calls to GWT.create.
  *        See {@link FakeUiBinderProvider} for details.
+ *   <li> ClientBundle: Uses a fake that will return fake CssResources as
+ *        defined below, and will return fake versions of other resources that
+ *        return unique strings for getText and getSafeUri. See
+ *        {@link FakeClientBundleProvider} for details.
  *   <li> Messages, CssResource, and SafeHtmlTemplates: uses a fake that
  *        implements each method by returning a String of SafeHtml based on the
  *        name of the method and any arguments passed to it. The exact format is
