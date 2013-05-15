@@ -232,4 +232,4 @@ A Maven repository will be available soon. In the meantime, do the following:
 [6]: http://www.jboss.org/javassist/downloads
 [7]: https://github.com/google/gwtmockito/wiki/jars/gwtmockito-1.0.0.jar
 [8]: http://google.github.io/gwtmockito/javadoc/
-[9]: TODO
+[9]: https://github.com/google/gwtmockito/tree/master/sample
