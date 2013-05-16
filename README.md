@@ -224,26 +224,27 @@ work - there is no way to mock final methods or automatically replace native
 methods without using `GwtMockitoTestRunner`.
 
 ## How do I install it?
-A Maven repository will be available soon. In the meantime, do the following:
+A Maven repository will be available [soon][5]. In the meantime, do the following:
 
-  1. Install the jars for the latest versions of [Mockito][5] and [Javassist][6]
+  1. Install the jars for the latest versions of [Mockito][6] and [Javassist][7]
      in your classpath.
-  2. Download the GwtMockito jar from [here][7] or check it out directly using 
+  2. Download the GwtMockito jar from [here][8] or check it out directly using 
      git from <https://github.com/google/gwtmockito.git>.
   3. Start writing new tests or annotate existing ones with
      `@RunWith(GwtMockitoTestRunner.class)`.
 
 ## Where can I learn more?
-  * For more details on the GwtMockito API, consult the [Javadoc][8]
+  * For more details on the GwtMockito API, consult the [Javadoc][9]
   * For an example of using GwtMockito to test some example classes, see the
-    [sample app][9].
+    [sample app][10].
 
 [1]: https://code.google.com/p/mockito/
 [2]: http://google.github.io/gwtmockito/javadoc/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class,%20com.google.gwtmockito.fakes.FakeProvider)
 [3]: https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay
 [4]: http://en.wikipedia.org/wiki/Dependency_injection
-[5]: https://code.google.com/p/mockito/downloads/list
-[6]: http://www.jboss.org/javassist/downloads
-[7]: https://github.com/google/gwtmockito/wiki/jars/gwtmockito-1.0.0.jar
-[8]: http://google.github.io/gwtmockito/javadoc/
-[9]: https://github.com/google/gwtmockito/tree/master/sample
+[5]: https://github.com/google/gwtmockito/issues/1
+[6]: https://code.google.com/p/mockito/downloads/list
+[7]: http://www.jboss.org/javassist/downloads
+[8]: https://github.com/google/gwtmockito/wiki/jars/gwtmockito-1.0.0.jar
+[9]: http://google.github.io/gwtmockito/javadoc/
+[10]: https://github.com/google/gwtmockito/tree/master/sample
