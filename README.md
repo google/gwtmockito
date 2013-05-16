@@ -19,59 +19,65 @@ Getting started with GwtMockito using Junit 4 is easy. Just annotate your test
 with `@RunWith(GwtMockitoTestRunner.class)`, then any calls to `GWT.create`
 encountered will return Mockito mocks instead of throwing exceptions:
 
-    @RunWith(GwtMockitoTestRunner.class)
-    public class MyTest {
-      @Test
-      public void shouldReturnMocksFromGwtCreate() {
-        Label myLabel = GWT.create(Label.class);
-        when(myLabel.getText()).thenReturn("some text");
-        assertEquals("some text", myLabel.getText());
-      }
-    }
+```java
+@RunWith(GwtMockitoTestRunner.class)
+public class MyTest {
+  @Test
+  public void shouldReturnMocksFromGwtCreate() {
+    Label myLabel = GWT.create(Label.class);
+    when(myLabel.getText()).thenReturn("some text");
+    assertEquals("some text", myLabel.getText());
+  }
+}
+```
 
 GwtMockito also creates fake implementations of all UiBinders that automatically
 populate `@UiField`s with Mockito mocks. Suppose you have a widget that looks
 like this:
 
-    class MyWidget extends Composite {
-      interface MyUiBinder extends UiBinder<Widget, MyWidget> {}
-      private final MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+```java
+public class MyWidget extends Composite {
+  interface MyUiBinder extends UiBinder<Widget, MyWidget> {}
+  private final MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-      @UiField Label numberLabel;
-      private final NumberFormatter formatter;
+  @UiField Label numberLabel;
+  private final NumberFormatter formatter;
 
-      MyWidget(NumberFormatter formatter) {
-        this.formatter = formatter;
-        initWidget(uiBinder.createAndBindUi(this);
-      }
+  public MyWidget(NumberFormatter formatter) {
+    this.formatter = formatter;
+    initWidget(uiBinder.createAndBindUi(this);
+  }
 
-      void setNumber(int number) {
-        numberLabel.setText(formatter.format(number));
-      }
-    }
+  void setNumber(int number) {
+    numberLabel.setText(formatter.format(number));
+  }
+}
+```
 
 When `createAndBindUi` is called, GwtMockito will automatically populate 
 `numberLabel` with a mock object. Since `@UiField`s are package-visible, they 
 can be read from your unit tests, which lets you test this widget as follows:
 
-    @RunWith(GwtMockitoTestRunner.class)
-    public class MyWidgetTest extends TestCase {
+```java
+@RunWith(GwtMockitoTestRunner.class)
+public class MyWidgetTest extends TestCase {
 
-      @Mock NumberFormatter formatter;
-      private MyWidget widget;
+  @Mock NumberFormatter formatter;
+  private MyWidget widget;
 
-      @Before
-      public void setUp() {
-        widget = new MyWidget(formatter);
-      }
+  @Before
+  public void setUp() {
+    widget = new MyWidget(formatter);
+  }
 
-      @Test
-      public void shouldFormatNumber() {
-        when(formatter.format(5)).thenReturn("5.00");
-        widget.setNumber(5);
-        verify(widget.numberLabel).setText("5.00");
-      }
-    }
+  @Test
+  public void shouldFormatNumber() {
+    when(formatter.format(5)).thenReturn("5.00");
+    widget.setNumber(5);
+    verify(widget.numberLabel).setText("5.00");
+  }
+}
+```
 
 Note that GwtMockito supports the `@Mock` annotation from Mockito, allowing 
 standard Mockito mocks to be mixed with mocks created by GwtMockito.
@@ -87,26 +93,30 @@ test with `@GwtMock` - this will cause all calls to `GWT.create` for that type
 to return a mock stored in that field, allowing you to reference it in your
 test. So if you have a class that looks like
 
-    class MyClass {
-      MyClass() {
-        SomeInterface myInterface = GWT.create(SomeInterface.class);
-        myInterface.setSomething(true);
-      }
-    }
+```java
+public class MyClass {
+  public MyClass() {
+    SomeInterface myInterface = GWT.create(SomeInterface.class);
+    myInterface.setSomething(true);
+  }
+}
+```
 
 then you can verify that it works correctly by writing a test that looks like
 this:
 
-    @RunWith(GwtMockitoTestRunner.class)
-    public class MyClassTest {
-      @GwtMock SomeInterface mockInterface;
+```java
+@RunWith(GwtMockitoTestRunner.class)
+public class MyClassTest {
+  @GwtMock SomeInterface mockInterface;
 
-      @Test
-      public void constructorShouldSetSomething() {
-        new MyClass();
-        verify(mockInterface).setSomething(true);
-      }
-    }
+  @Test
+  public void constructorShouldSetSomething() {
+    new MyClass();
+    verify(mockInterface).setSomething(true);
+  }
+}
+```
 
 ### Returning fake objects
 
@@ -133,16 +143,18 @@ poses problems in GWT since [JavaScript overlay types][3] (which include
 GwtMockito does some classloader black magic to remove all final modifiers from
 classes and interfaces, so the following test will pass:
 
-    @RunWith(GwtMockitoTestRunner.class)
-    public class MyTest {
-      @Mock Element element;
+```java
+@RunWith(GwtMockitoTestRunner.class)
+public class MyTest {
+  @Mock Element element;
 
-      @Test
-      public void shouldReturnMocksFromGwtCreate() {
-        when(element.getClassName()).thenReturn("mockClass");
-        assertEquals("mockClass", myLabel.getClassName());
-      }
-    }
+  @Test
+  public void shouldReturnMocksFromGwtCreate() {
+    when(element.getClassName()).thenReturn("mockClass");
+    assertEquals("mockClass", myLabel.getClassName());
+  }
+}
+```
 
 As long as your test uses `GwtMockitoTestRunner`, it is possible to mock any
 final methods.
@@ -174,31 +186,33 @@ work if you're using JUnit 3 or rely on another custom test runner. In these
 situations, you can still get most of the benefit of GwtMockito by calling
 `GwtMockito.initMocks` directly. A test written in this style looks like this:
 
-    public class MyWidgetTest extends TestCase {
+```java
+public class MyWidgetTest extends TestCase {
 
-      private MyWidget widget;
+  private MyWidget widget;
 
-      @Override
-      public void setUp() {
-        super.setUp();
-        GwtMockito.initMocks(this);
-        widget = new MyWidget() {
-          protected void initWidget(Widget w) {
-            // Disarm for testing
-          }
-        };
+  @Override
+  public void setUp() {
+    super.setUp();
+    GwtMockito.initMocks(this);
+    widget = new MyWidget() {
+      protected void initWidget(Widget w) {
+        // Disarm for testing
       }
+    };
+  }
 
-      @Override
-      public void tearDown() {
-        super.tearDown();
-        GwtMockito.tearDown();
-      }
+  @Override
+  public void tearDown() {
+    super.tearDown();
+    GwtMockito.tearDown();
+  }
 
-      public void testSomething() {
-        // Test code goes here
-      }
-    }
+  public void testSomething() {
+    // Test code goes here
+  }
+}
+```
 
 The test must explicitly call `initMocks` during its setup and `tearDown` when
 it is being teared down, or else state can leak between tests. When 
