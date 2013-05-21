@@ -52,7 +52,7 @@ public class MyWidgetTest {
 
     // Since name is a @UiField, it will be automatically filled with a mock
     // that we can verify here.
-    verify(widget.name).setText("John Smith");
+    verify(widget.name).setText("John Smiths");
   }
 
   @Test
