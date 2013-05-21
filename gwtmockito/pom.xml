@@ -11,6 +11,14 @@
 
   <name>GwtMockito</name>
 
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+      </resource>
+    </resources>
+  </build>
+
   <dependencies>
 
     <!-- GWT dependencies -->
