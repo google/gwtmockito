@@ -25,6 +25,28 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:git@github.com:google/gwtmockito.git</connection>
+    <developerConnection>scm:git:git@github.com:google/gwtmockito.git</developerConnection>
+    <url>git@github.com:google/gwtmockito.git</url>
+  </scm>
+
+  <developers>
+    <developer>
+      <id>ekuefler</id>
+      <name>Erik Kuefler</name>
+      <email>ekuefler@gmail.com</email>
+    </developer>
+  </developers>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -73,6 +95,19 @@
             <source>1.6</source>
             <target>1.6</target>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>sign-artifacts</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sign</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>net.ltgt.gwt.maven</groupId>
