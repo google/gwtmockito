@@ -236,21 +236,21 @@ section:
 </dependency>
 ```
 
-You can also download the [jar][8] directly or check out the source using git
+You can also download the [jar][5] directly or check out the source using git
 from <https://github.com/google/gwtmockito.git>. In these cases you will have
 to manually install the jars for [Mockito][6] and [Javassist][7].
 
 ## Where can I learn more?
-  * For more details on the GwtMockito API, consult the [Javadoc][9]
+  * For more details on the GwtMockito API, consult the [Javadoc][8]
   * For an example of using GwtMockito to test some example classes, see the
-    [sample app][10].
+    [sample app][9].
 
 [1]: https://code.google.com/p/mockito/
 [2]: http://google.github.io/gwtmockito/javadoc/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class,%20com.google.gwtmockito.fakes.FakeProvider)
 [3]: https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay
 [4]: http://en.wikipedia.org/wiki/Dependency_injection
+[5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.0.0/gwtm8ckito-1.0.0.jar
 [6]: https://code.google.com/p/mockito/downloads/list
 [7]: http://www.jboss.org/javassist/downloads
-[8]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.0.0/gwtmockito-1.0.0.jar
-[9]: http://google.github.io/gwtmockito/javadoc/
-[10]: https://github.com/google/gwtmockito/tree/master/sample
+[8]: http://google.github.io/gwtmockito/javadoc/
+[9]: https://github.com/google/gwtmockito/tree/master/sample
