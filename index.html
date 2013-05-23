@@ -252,16 +252,22 @@ methods without using <code>GwtMockitoTestRunner</code>.</p>
 
 <h2>How do I install it?</h2>
 
-<p>A Maven repository will be available <a href="https://github.com/google/gwtmockito/issues/1">soon</a>. In the meantime, do the following:</p>
+<p>If you're using Maven, you can add the following to your <code>&lt;dependencies&gt;</code>
+section:</p>
 
-<ol>
-<li>Install the jars for the latest versions of <a href="https://code.google.com/p/mockito/downloads/list">Mockito</a> and <a href="http://www.jboss.org/javassist/downloads">Javassist</a>
- in your classpath.</li>
-<li>Download the GwtMockito jar from <a href="https://github.com/google/gwtmockito/wiki/jars/gwtmockito-1.0.0.jar">here</a> or check it out directly using 
- git from <a href="https://github.com/google/gwtmockito.git">https://github.com/google/gwtmockito.git</a>.</li>
-<li>Start writing new tests or annotate existing ones with
- <code>@RunWith(GwtMockitoTestRunner.class)</code>.</li>
-</ol><h2>Where can I learn more?</h2>
+<div class="highlight"><pre><span class="nt">&lt;dependency&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>com.google.gwt.gwtmockito<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>gwtmockito<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</pre></div>
+
+<p>You can also download the <a href="http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.0.0/gwtmockito-1.0.0.jar">jar</a> directly or check out the source using git
+from <a href="https://github.com/google/gwtmockito.git">https://github.com/google/gwtmockito.git</a>. In these cases you will have
+to manually install the jars for <a href="https://code.google.com/p/mockito/downloads/list">Mockito</a> and <a href="http://www.jboss.org/javassist/downloads">Javassist</a>.</p>
+
+<h2>Where can I learn more?</h2>
 
 <ul>
 <li>For more details on the GwtMockito API, consult the <a href="http://google.github.io/gwtmockito/javadoc/">Javadoc</a>
