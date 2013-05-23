@@ -224,14 +224,21 @@ work - there is no way to mock final methods or automatically replace native
 methods without using `GwtMockitoTestRunner`.
 
 ## How do I install it?
-A Maven repository will be available [soon][5]. In the meantime, do the following:
+If you're using Maven, you can add the following to your `<dependencies>`
+section:
 
-  1. Install the jars for the latest versions of [Mockito][6] and [Javassist][7]
-     in your classpath.
-  2. Download the GwtMockito jar from [here][8] or check it out directly using 
-     git from <https://github.com/google/gwtmockito.git>.
-  3. Start writing new tests or annotate existing ones with
-     `@RunWith(GwtMockitoTestRunner.class)`.
+```xml
+<dependency>
+  <groupId>com.google.gwt.gwtmockito</groupId>
+  <artifactId>gwtmockito</artifactId>
+  <version>1.0.0</version>
+  <scope>test</scope>
+</dependency>
+```
+
+You can also download the [jar][8] directly or check out the source using git
+from <https://github.com/google/gwtmockito.git>. In these cases you will have
+to manually install the jars for [Mockito][6] and [Javassist][7].
 
 ## Where can I learn more?
   * For more details on the GwtMockito API, consult the [Javadoc][9]
@@ -242,9 +249,8 @@ A Maven repository will be available [soon][5]. In the meantime, do the followin
 [2]: http://google.github.io/gwtmockito/javadoc/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class,%20com.google.gwtmockito.fakes.FakeProvider)
 [3]: https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay
 [4]: http://en.wikipedia.org/wiki/Dependency_injection
-[5]: https://github.com/google/gwtmockito/issues/1
 [6]: https://code.google.com/p/mockito/downloads/list
 [7]: http://www.jboss.org/javassist/downloads
-[8]: https://github.com/google/gwtmockito/wiki/jars/gwtmockito-1.0.0.jar
+[8]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.0.0/gwtmockito-1.0.0.jar
 [9]: http://google.github.io/gwtmockito/javadoc/
 [10]: https://github.com/google/gwtmockito/tree/master/sample
