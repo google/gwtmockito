@@ -24,6 +24,8 @@ import javassist.Loader;
 import javassist.NotFoundException;
 import javassist.Translator;
 
+import com.google.gwt.user.client.DOM;
+
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.ParentRunner;
@@ -156,9 +158,9 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
         method.setModifiers(method.getModifiers() & ~Modifier.FINAL);
       }
 
-      // Create stub implementations for all native methods
+      // Create stub implementations for certain methods
       for (CtMethod method : clazz.getDeclaredMethods()) {
-        if ((method.getModifiers() & Modifier.NATIVE) != 0) {
+        if (shouldStubMethod(method)) {
           method.setModifiers(method.getModifiers() & ~Modifier.NATIVE);
           CtClass returnType = method.getReturnType();
           if (returnType != CtClass.voidType
@@ -178,6 +180,16 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
           }
         }
       }
+    }
+
+    private boolean shouldStubMethod(CtMethod method) {
+      return
+          // Stub all native methods
+          (method.getModifiers() & Modifier.NATIVE) != 0
+
+          // Stub the create methods from DOM since they do non-typesafe element casts
+          || (method.getDeclaringClass().getName().equals(DOM.class.getCanonicalName())
+              && method.getName().startsWith("create"));
     }
 
     @Override

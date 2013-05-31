@@ -42,9 +42,11 @@ import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwtmockito.fakes.FakeProvider;
 
@@ -329,6 +331,24 @@ public class GwtMockitoTest {
       }
     });
     assertEquals("externalText", result.toString());
+  }
+
+  /**
+   * This would fail if we didn't stub the create methods from DOM. See
+   * https://github.com/google/gwtmockito/issues/4.
+   */
+  @Test
+  @SuppressWarnings("unused")
+  public void shouldAllowCreatingLayoutPanels() {
+    new SimpleLayoutPanel();
+    // Expect no exceptions
+  }
+
+  @Test
+  public void shouldMockResultsOfStaticDomCreateMethods() {
+    com.google.gwt.user.client.Element div = DOM.createDiv();
+    when(div.getClassName()).thenReturn("stubClass");
+    assertEquals("stubClass", div.getClassName());
   }
 
   static class PackagePrivateClass {
