@@ -202,7 +202,7 @@ public class GwtMockito {
       }
 
       // If nothing has been registered, just return a new mock object to avoid NPEs.
-      return (T) mock(type, Mockito.RETURNS_MOCKS);
+      return (T) mock(type, new ReturnsCustomMocks());
     }
 
     @Override

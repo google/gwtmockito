@@ -20,12 +20,18 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.IFrameElement;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.i18n.client.BidiPolicy;
 import com.google.gwt.i18n.client.Messages;
 import com.google.gwt.resources.client.ClientBundle;
@@ -349,6 +355,21 @@ public class GwtMockitoTest {
     com.google.gwt.user.client.Element div = DOM.createDiv();
     when(div.getClassName()).thenReturn("stubClass");
     assertEquals("stubClass", div.getClassName());
+  }
+
+  @Test
+  @SuppressWarnings("unused")
+  public void shouldAllowOnlyJavascriptCastsThatAreValidJavaCasts() {
+    // Casts to ancestors should be legal
+    JavaScriptObject o = Document.get().createDivElement().cast();
+    Node n = Document.get().createDivElement().cast();
+    DivElement d = Document.get().createDivElement().cast();
+
+    // Casts to sibling elements shouldn't be legal (even though they are in javascript)
+    try {
+      IFrameElement i = Document.get().createDivElement().cast();
+      fail("Exception not thrown");
+    } catch (ClassCastException expected) {}
   }
 
   static class PackagePrivateClass {
