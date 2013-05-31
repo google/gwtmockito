@@ -48,10 +48,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwtmockito.fakes.FakeProvider;
 
-import junit.framework.Assert;
-
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -73,7 +72,7 @@ public class GwtMockitoTest {
   public void setUp() {
     GWT.create(SomeUiBinder.class); // Make sure GWT.create in setUp works
   }
-  
+
   @Test
   public void shouldReturnMocksFromGwtCreate() {
     SampleInterface createdInterface = GWT.create(SampleInterface.class);
@@ -114,7 +113,7 @@ public class GwtMockitoTest {
   public void shouldNotBreakWhenCallingHistoryNewItem() {
     History.newItem("foo");
   }
-  
+
   @Test
   public void shouldCreateFakeMessages() {
     SampleMessages messages = GWT.create(SampleMessages.class);
@@ -176,7 +175,7 @@ public class GwtMockitoTest {
 
     assertEquals("some value", result.doSomethingElse());
   }
-  
+
   @Test
   public void typeProvidersShouldWorkForSubtypes() {
     final Widget someWidget = mock(Widget.class);
@@ -188,11 +187,11 @@ public class GwtMockitoTest {
         return someWidget;
       }
     });
-    
+
     assertSame(someWidget, GWT.create(Label.class));
   }
-  
-  @Test(expected=IllegalArgumentException.class)
+
+  @Test(expected = IllegalArgumentException.class)
   public void shouldNotAllowProvidersForGwtMockedTypes() {
     GwtMockito.useProviderForType(SampleInterface.class, new FakeProvider<SampleInterface>() {
       @Override
@@ -201,8 +200,8 @@ public class GwtMockitoTest {
       }
     });
   }
-  
-  @Test(expected=IllegalArgumentException.class)
+
+  @Test(expected = IllegalArgumentException.class)
   public void shouldNotAllowMultipleGwtMocksForSameType() {
     GwtMockito.initMocks(new Object() {
       @GwtMock SampleInterface mock1;
@@ -301,7 +300,7 @@ public class GwtMockitoTest {
   }
 
   @Test
-  public void testShouldMockClientBundles() throws Exception {
+  public void shouldMockClientBundles() throws Exception {
     SomeClientBundle clientBundle = GWT.create(SomeClientBundle.class);
 
     // CSS resources should be faked
@@ -339,11 +338,11 @@ public class GwtMockitoTest {
   }
 
   interface SomeUiBinder extends UiBinder<Widget, Object> {}
-  
+
   private interface SampleInterface {
     String doSomething();
   }
-  
+
   private interface AnotherInterface {
     String doSomethingElse();
   }
@@ -360,7 +359,7 @@ public class GwtMockitoTest {
     String style1();
     String style2();
   }
-  
+
   interface SomeClientBundle extends ClientBundle {
     SampleCss css();
     DataResource data();

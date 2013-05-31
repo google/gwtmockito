@@ -16,14 +16,9 @@
 package com.google.gwtmockito;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.i18n.client.Messages;
-import com.google.gwt.resources.client.CssResource;
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -46,7 +41,7 @@ import org.junit.runners.JUnit4;
 public class GwtMockitoRunnerlessTest {
 
   @GwtMock SampleInterface mockedInterface;
-  
+
   @Before
   public void setUp() {
     GwtMockito.initMocks(this);
@@ -56,7 +51,7 @@ public class GwtMockitoRunnerlessTest {
   public void tearDown() {
     GwtMockito.tearDown();
   }
-  
+
   @Test
   public void shouldReturnMocksFromGwtCreate() {
     SampleInterface createdInterface = GWT.create(SampleInterface.class);
@@ -66,7 +61,7 @@ public class GwtMockitoRunnerlessTest {
 
   @Test
   public void shouldCreateFakeUiBinders() {
-    SampleWidget widget = new SampleWidget(){
+    SampleWidget widget = new SampleWidget() {
       @Override
       protected void initWidget(Widget widget) { /* disarm */ }
     };
@@ -92,13 +87,13 @@ public class GwtMockitoRunnerlessTest {
 
     assertEquals("some value", result.doSomethingElse());
   }
-  
-  @Test(expected=UnsupportedOperationException.class)
+
+  @Test(expected = UnsupportedOperationException.class)
   public void shouldRestoreGwtCreateAfterTearDown() {
     GwtMockito.tearDown();
     GWT.create(SampleInterface.class);
   }
-  
+
   private interface SampleInterface {
     String doSomething();
   }
