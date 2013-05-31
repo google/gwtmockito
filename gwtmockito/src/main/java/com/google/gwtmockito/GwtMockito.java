@@ -28,6 +28,7 @@ import com.google.gwtmockito.fakes.FakeClientBundleProvider;
 import com.google.gwtmockito.fakes.FakeMessagesProvider;
 import com.google.gwtmockito.fakes.FakeProvider;
 import com.google.gwtmockito.fakes.FakeUiBinderProvider;
+import com.google.gwtmockito.impl.ReturnsCustomMocks;
 
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;

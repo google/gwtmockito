@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.google.gwtmockito;
+package com.google.gwtmockito.impl;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -22,10 +22,13 @@ import org.mockito.invocation.InvocationOnMock;
 
 /**
  * An answer that generally returns mocks, but with a few overrides.
+ * <p>
+ * This class is public so that it can be refernced by generated code - users
+ * should not reference it directly.
  * 
  * @author ekuefler@google.com (Erik Kuefler)
  */
-class ReturnsCustomMocks extends ReturnsMocks {
+public class ReturnsCustomMocks extends ReturnsMocks {
   @Override
   public Object answer(InvocationOnMock invocation) throws Throwable {
     // Make JavaScriptObject.cast work in most cases by forcing it to return the underlying mock

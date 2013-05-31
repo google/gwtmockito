@@ -169,7 +169,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
             // Return mocks for methods that don't return voids, primitives, or strings
             method.setBody(String.format(
                 "return (%1$s) org.mockito.Mockito.mock("
-                    + "%1$s.class, new com.google.gwtmockito.ReturnsCustomMocks());",
+                    + "%1$s.class, new com.google.gwtmockito.impl.ReturnsCustomMocks());",
                 returnType.getName()));
           } else if (returnType.getName().equals("java.lang.String")) {
             // Return empty strings for string methods
