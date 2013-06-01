@@ -382,6 +382,18 @@ public class GwtMockitoTest {
   }
 
   @Test
+  @SuppressWarnings("unused")
+  public void testShouldAllowLayoutPanelSubclasses() {
+    class MyPanel extends SimpleLayoutPanel {
+      public MyPanel() {
+        Label label = GWT.create(Label.class);
+        add(label);
+      }
+    }
+    new MyPanel();
+  }
+
+  @Test
   public void shouldMockResultsOfStaticDomCreateMethods() {
     com.google.gwt.user.client.Element div = DOM.createDiv();
     when(div.getClassName()).thenReturn("stubClass");

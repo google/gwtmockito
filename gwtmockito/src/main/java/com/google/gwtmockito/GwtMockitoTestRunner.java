@@ -24,6 +24,9 @@ import javassist.NotFoundException;
 import javassist.Translator;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.user.client.ui.Widget;
 
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -207,9 +210,20 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
           // Stub all native methods
           (method.getModifiers() & Modifier.NATIVE) != 0
 
-          // Stub the create methods from DOM since they do non-typesafe element casts
-          || (method.getDeclaringClass().getName().equals(DOM.class.getCanonicalName())
-              && method.getName().startsWith("create"));
+          // Stub the static methods from DOM since they do lots of ugly DOM operations
+          || declaringClassIs(method, DOM.class)
+
+          // Stub methods from common base types so that things work when users extend them
+          || (method.getDeclaringClass().getPackageName().equals("com.google.gwt.user.client.ui")
+              && (declaringClassIs(method, UIObject.class)
+                  || declaringClassIs(method, Composite.class)
+                  || declaringClassIs(method, Widget.class)
+                  || method.getDeclaringClass().getName().endsWith("Panel"))
+              && (method.getModifiers() & Modifier.ABSTRACT) == 0);
+    }
+
+    private boolean declaringClassIs(CtMethod method, Class<?> clazz) {
+      return method.getDeclaringClass().getName().equals(clazz.getCanonicalName());
     }
 
     @Override
