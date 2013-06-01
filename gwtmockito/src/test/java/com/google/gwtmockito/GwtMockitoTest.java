@@ -267,6 +267,37 @@ public class GwtMockitoTest {
   }
 
   @Test
+  public void shouldReturnDefaultValuesForPrimitiveWrappersFromNativeMethods() throws Exception {
+    class SomeClass {
+      private native Boolean getBoolean();
+      private native Byte getByte();
+      private native Character getCharacter();
+      private native Double getDouble();
+      private native Float getFloat();
+      private native Integer getInteger();
+      private native Long getLong();
+      private native Short getShort();
+    }
+
+    assertEquals(false, new SomeClass().getBoolean());
+    assertEquals(0, (char) new SomeClass().getCharacter());
+    assertEquals(0, new SomeClass().getDouble(), 0.01);
+    assertEquals(0, new SomeClass().getFloat(), 0.01);
+    assertEquals(0, (int) new SomeClass().getInteger());
+    assertEquals(0, (long) new SomeClass().getLong());
+    assertEquals(0, (short) new SomeClass().getShort());
+  }
+
+  @Test
+  public void shouldReturnFirstValueForEnumsFromNativeMethods() throws Exception {
+    class SomeClass {
+      private native SomeEnum getSomeEnum();
+    }
+
+    assertEquals(SomeEnum.ONE, new SomeClass().getSomeEnum());
+  }
+
+  @Test
   public void shouldReturnEmptyStringsFromNativeMethods() throws Exception {
     class SomeClass {
       private native String getString() /*-{
@@ -407,6 +438,10 @@ public class GwtMockitoTest {
     ExternalTextResource externalText();
     ImageResource image();
     TextResource text();
+  }
+
+  enum SomeEnum {
+    ONE, TWO
   }
 
   private static class SampleWidget extends Composite {
