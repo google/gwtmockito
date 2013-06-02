@@ -24,6 +24,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwtmockito.fakes.FakeClientBundleProvider;
 import com.google.gwtmockito.fakes.FakeMessagesProvider;
 import com.google.gwtmockito.fakes.FakeProvider;
@@ -70,6 +71,11 @@ import java.util.Map.Entry;
  *        name of the method and any arguments passed to it. The exact format is
  *        undefined. See {@link FakeMessagesProvider} for details.
  * </ul>
+ * <p>
+ * The type returned from GWT.create will generally be the same as the type
+ * passed in. The exception is when GWT.create'ing a subclass of
+ * {@link RemoteService} - in this case, the result of GWT.create will be the
+ * Async version of that interface as defined by gwt-rpc.
  * <p>
  * If {@link #initMocks} is called manually, it is important to invoke
  * {@link #tearDown} once the test has been completed. Failure to do so can
@@ -180,14 +186,30 @@ public class GwtMockito {
   }
 
   private static class Bridge extends GWTBridge {
-    private Map<Class<?>, FakeProvider<?>> registeredProviders = 
+    private final Map<Class<?>, FakeProvider<?>> registeredProviders =
         new HashMap<Class<?>, FakeProvider<?>>();
-    private Map<Class<?>, Object> registeredMocks = new HashMap<Class<?>, Object>();
+    private final Map<Class<?>, Object> registeredMocks = new HashMap<Class<?>, Object>();
 
     @Override
     @SuppressWarnings("unchecked") // safe since we check whether the type is assignable
     public <T> T create(Class<?> type) {
-      // First check if we have a GwtMock for this exact type and use it if so.
+      // Handle RemoteServices specially - GWT.create'ing them should return the Async version
+      if (RemoteService.class.isAssignableFrom(type)) {
+        Class<?> asyncType;
+        try {
+          asyncType = Class.forName(type.getCanonicalName() + "Async");
+        } catch (ClassNotFoundException e) {
+          throw new IllegalArgumentException(
+              type.getCanonicalName() + " does not have a corresponding async interface", e);
+        }
+        if (registeredMocks.containsKey(asyncType)) {
+          return (T) registeredMocks.get(asyncType);
+        } else {
+          return (T) mock(asyncType);
+        }
+      }
+
+      // Otherwise, first check if we have a GwtMock for this exact type and use it if so.
       if (registeredMocks.containsKey(type)) {
         return (T) registeredMocks.get(type);
       }
