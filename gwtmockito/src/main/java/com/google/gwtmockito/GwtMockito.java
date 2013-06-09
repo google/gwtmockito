@@ -139,7 +139,7 @@ public class GwtMockito {
    * Mockito mock from GWT.create, it's probably easier to use {@link GwtMock}
    * instead.
    */
-  public static <T> void useProviderForType(Class<T> type, FakeProvider<? extends T> provider) {
+  public static void useProviderForType(Class<?> type, FakeProvider<?> provider) {
     if (bridge == null) {
       throw new IllegalStateException("Must call initMocks() before calling useProviderForType()");
     }

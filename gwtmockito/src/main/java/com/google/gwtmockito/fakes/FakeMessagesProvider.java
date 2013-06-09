@@ -44,7 +44,7 @@ public class FakeMessagesProvider<T> implements FakeProvider<T> {
    */
   @Override
   @SuppressWarnings("unchecked") // safe since the proxy implements type
-  public T getFake(Class<? extends T> type) {
+  public T getFake(Class<?> type) {
     return (T) Proxy.newProxyInstance(FakeMessagesProvider.class.getClassLoader(), new Class<?>[] {type},
         new InvocationHandler() {
           @Override

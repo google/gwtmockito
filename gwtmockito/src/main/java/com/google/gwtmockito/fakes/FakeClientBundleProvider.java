@@ -48,8 +48,7 @@ public class FakeClientBundleProvider implements FakeProvider<ClientBundle> {
    * @param type interface to be implemented by the returned type.
    */
   @Override
-  @SuppressWarnings("unchecked") // safe since the proxy implements type
-  public ClientBundle getFake(Class<? extends ClientBundle> type) {
+  public ClientBundle getFake(Class<?> type) {
     return (ClientBundle) Proxy.newProxyInstance(
         FakeClientBundleProvider.class.getClassLoader(),
         new Class<?>[] {type},

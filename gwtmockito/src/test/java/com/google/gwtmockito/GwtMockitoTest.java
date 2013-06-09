@@ -50,6 +50,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
@@ -169,7 +170,7 @@ public class GwtMockitoTest {
   public void canUseProvidersForTypes() {
     GwtMockito.useProviderForType(AnotherInterface.class, new FakeProvider<AnotherInterface>() {
       @Override
-      public AnotherInterface getFake(Class<? extends AnotherInterface> type) {
+      public AnotherInterface getFake(Class<?> type) {
         return new AnotherInterface() {
           @Override
           public String doSomethingElse() {
@@ -190,7 +191,7 @@ public class GwtMockitoTest {
 
     GwtMockito.useProviderForType(Widget.class, new FakeProvider<Widget>() {
       @Override
-      public Widget getFake(Class<? extends Widget> type) {
+      public Widget getFake(Class<?> type) {
         assertTrue(type == Label.class);
         return someWidget;
       }
@@ -203,7 +204,7 @@ public class GwtMockitoTest {
   public void shouldNotAllowProvidersForGwtMockedTypes() {
     GwtMockito.useProviderForType(SampleInterface.class, new FakeProvider<SampleInterface>() {
       @Override
-      public SampleInterface getFake(Class<? extends SampleInterface> type) {
+      public SampleInterface getFake(Class<?> type) {
         return mock(SampleInterface.class);
       }
     });
@@ -413,6 +414,20 @@ public class GwtMockitoTest {
       IFrameElement i = Document.get().createDivElement().cast();
       fail("Exception not thrown");
     } catch (ClassCastException expected) {}
+  }
+
+  @Test
+  public void canUseProvidersForDifferentTypes() {
+    GwtMockito.useProviderForType(Button.class, new FakeProvider<Label>() {
+      @Override
+      public Label getFake(Class<?> type) {
+        Label label = mock(Label.class);
+        when(label.getText()).thenReturn("abc");
+        return label;
+      }
+    });
+    Label label = GWT.create(Button.class);
+    assertEquals("abc", label.getText());
   }
 
   static class PackagePrivateClass {

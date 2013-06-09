@@ -73,7 +73,7 @@ public class GwtMockitoRunnerlessTest {
   public void canUseProvidersForTypes() {
     GwtMockito.useProviderForType(AnotherInterface.class, new FakeProvider<AnotherInterface>() {
       @Override
-      public AnotherInterface getFake(Class<? extends AnotherInterface> type) {
+      public AnotherInterface getFake(Class<?> type) {
         return new AnotherInterface() {
           @Override
           public String doSomethingElse() {

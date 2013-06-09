@@ -48,8 +48,7 @@ public class FakeUiBinderProvider implements FakeProvider<UiBinder<?, ?>>{
    *        represent an interface that directly extends {@link UiBinder}.
    */
   @Override
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  public UiBinder<?, ?> getFake(final Class<? extends UiBinder<?, ?>> type) {
+  public UiBinder<?, ?> getFake(final Class<?> type) {
     return (UiBinder<?, ?>) Proxy.newProxyInstance(
         FakeUiBinderProvider.class.getClassLoader(),
         new Class<?>[] {type},
