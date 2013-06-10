@@ -95,7 +95,7 @@ import java.util.List;
  */
 public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
 
-  private final ClassLoader gwtMockitoClassLoader = new GwtMockitoClassLoader();
+  private final ClassLoader gwtMockitoClassLoader;
   private final Class<?> customLoadedGwtMockito;
 
   /**
@@ -104,6 +104,19 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
    */
   public GwtMockitoTestRunner(Class<?> unitTestClass) throws InitializationError {
     super(unitTestClass);
+
+    // Build a fresh class pool with the system path and any user-specified paths and use it to
+    // create the custom classloader
+    ClassPool classPool = new ClassPool();
+    classPool.appendSystemPath();
+    for (String path : getAdditionalClasspaths()) {
+      try {
+        classPool.appendClassPath(path);
+      } catch (NotFoundException e) {
+        throw new IllegalStateException("Cannot find classpath entry: " + path, e);
+      }
+    }
+    gwtMockitoClassLoader = new GwtMockitoClassLoader(getParentClassloader(), classPool);
 
     try {
       // Reload the test class with our own custom class loader that does things like remove
@@ -179,6 +192,17 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
   }
 
   /**
+   * Returns the classloader to use as the parent of GwtMockito's classloader. By default this is
+   * the system classloader. This can be customized by defining a custom test runner extending
+   * {@link GwtMockitoTestRunner} and overriding this method.
+   *
+   * @return classloader to use for delegation when loading classes via GwtMockito
+   */
+  protected ClassLoader getParentClassloader() {
+    return ClassLoader.getSystemClassLoader();
+  }
+
+  /**
    * Returns a list of additional sources from which the classloader should read while running
    * tests. By default this list is empty; custom sources can be specified by defining a custom test
    * runner extending {@link GwtMockitoTestRunner} and overriding this method.
@@ -232,19 +256,8 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
   /** Custom classloader that performs additional modifications to loaded classes. */
   private final class GwtMockitoClassLoader extends Loader implements Translator {
 
-    GwtMockitoClassLoader() {
-      // Build a fresh class pool with the system path and any user-specified paths
-      ClassPool classPool = new ClassPool();
-      classPool.appendSystemPath();
-      for (String path : getAdditionalClasspaths()) {
-        try {
-          classPool.appendClassPath(path);
-        } catch (NotFoundException e) {
-          throw new IllegalStateException("Cannot find classpath entry: " + path, e);
-        }
-      }
-
-      // Hook in a translator to be run whenever a class is loaded
+    GwtMockitoClassLoader(ClassLoader classLoader, ClassPool classPool) {
+      super(classLoader, classPool);
       try {
         addTranslator(classPool, this);
       } catch (NotFoundException e) {
