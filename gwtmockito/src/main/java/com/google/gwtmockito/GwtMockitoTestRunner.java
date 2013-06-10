@@ -24,8 +24,30 @@ import javassist.NotFoundException;
 import javassist.Translator;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.CellPanel;
+import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DeckLayoutPanel;
+import com.google.gwt.user.client.ui.DeckPanel;
+import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.RenderablePanel;
+import com.google.gwt.user.client.ui.ResizeLayoutPanel;
+import com.google.gwt.user.client.ui.SimpleLayoutPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.SplitLayoutPanel;
+import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.junit.runner.notification.RunNotifier;
@@ -38,6 +60,8 @@ import org.junit.runners.model.TestClass;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * A JUnit4 test runner that executes a test using GwtMockito. In addition to
@@ -58,6 +82,11 @@ import java.lang.reflect.Modifier;
  * <li> Native methods will be given no-op implementations so that calls to them
  *      don't cause runtime failures. If the native method returns a value, it
  *      will return either a default primitive type or a new mock object.
+ * <li> The methods of many common widget base classes, such as {@link Widget},
+ *      {@link Composite}, and most subclasses of {@link Panel}, will have their
+ *      methods replaced with no-ops to make it easier to test widgets extending
+ *      them. This behavior can be customized by overriding
+ *      {@link GwtMockitoTestRunner#getClassesToStub}.
  * </ul>
  *
  * @see GwtMockito
@@ -65,9 +94,8 @@ import java.lang.reflect.Modifier;
  */
 public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
 
-  private static final ClassLoader GWT_MOCKITO_CLASS_LOADER = new GwtMockitoClassLoader();
-
-  private Class<?> customLoadedGwtMockito;
+  private final ClassLoader gwtMockitoClassLoader = new GwtMockitoClassLoader();
+  private final Class<?> customLoadedGwtMockito;
 
   /**
    * Creates a test runner which allows final GWT classes to be mocked. Works by reloading the test
@@ -80,8 +108,8 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
       // Reload the test class with our own custom class loader that does things like remove
       // final modifiers, allowing GWT Elements to be mocked. Also load GwtMockito itself so we can
       // invoke initMocks on it later.
-      Class<?> customLoadedTestClass = GWT_MOCKITO_CLASS_LOADER.loadClass(unitTestClass.getName());
-      customLoadedGwtMockito = GWT_MOCKITO_CLASS_LOADER.loadClass(GwtMockito.class.getName());
+      Class<?> customLoadedTestClass = gwtMockitoClassLoader.loadClass(unitTestClass.getName());
+      customLoadedGwtMockito = gwtMockitoClassLoader.loadClass(GwtMockito.class.getName());
 
       // Overwrite the private "fTestClass" field in ParentRunner (superclass of
       // BlockJUnit4ClassRunner). This refers to the test class being run, so replace it with our
@@ -94,6 +122,65 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     }
   }
 
+  /**
+   * Returns a collection of classes whose non-abstract methods should always be replaced with
+   * no-ops. By default, this list includes {@link Composite}, {@link DOM} {@link UIObject},
+   * {@link Widget}, and most subclasses of {@link Panel}. This makes it much safer to test code
+   * that uses or extends these types.
+   * <p>
+   * This list can be customized by defining a new test runner extending
+   * {@link GwtMockitoTestRunner} and overriding this method. This allows users to explicitly stub
+   * out particular classes that are causing problems in tests. If you do this, you will probably
+   * want to retain the classes that are stubbed here by doing something like this:
+   *
+   * <pre>
+   * &#064;Override
+   * protected Collection&lt;Class&lt;?&gt;&gt; getClassesToStub() {
+   *   Collection&lt;Class&lt;?&gt;&gt; classes = super.getClassesToStub();
+   *   classes.add(MyBaseWidget.class);
+   *   return classes;
+   * }
+   * </pre>
+   *
+   * @return a collection of classes whose methods should be stubbed with no-ops while running tests
+   */
+  protected Collection<Class<?>> getClassesToStub() {
+    Collection<Class<?>> classes = new LinkedList<Class<?>>();
+    classes.add(Composite.class);
+    classes.add(DOM.class);
+    classes.add(UIObject.class);
+    classes.add(Widget.class);
+
+    classes.add(AbsolutePanel.class);
+    classes.add(CellPanel.class);
+    classes.add(ComplexPanel.class);
+    classes.add(DeckLayoutPanel.class);
+    classes.add(DeckPanel.class);
+    classes.add(DecoratorPanel.class);
+    classes.add(DockLayoutPanel.class);
+    classes.add(DockPanel.class);
+    classes.add(FlowPanel.class);
+    classes.add(FocusPanel.class);
+    classes.add(HorizontalPanel.class);
+    classes.add(HTMLPanel.class);
+    classes.add(LayoutPanel.class);
+    classes.add(Panel.class);
+    classes.add(PopupPanel.class);
+    classes.add(RenderablePanel.class);
+    classes.add(ResizeLayoutPanel.class);
+    classes.add(SimpleLayoutPanel.class);
+    classes.add(SimplePanel.class);
+    classes.add(SplitLayoutPanel.class);
+    classes.add(StackPanel.class);
+    classes.add(VerticalPanel.class);
+
+    return classes;
+  }
+
+  /**
+   * Runs the tests in this runner, ensuring that the custom GwtMockito classloader is installed as
+   * the context classloader.
+   */
   @Override
   public void run(RunNotifier notifier) {
     // When running the test, we want to be sure to use our custom classloader as the context
@@ -102,7 +189,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     // package-private classes, since the mock implementation would be created by a different
     // classloader than the class being mocked.
     ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
-    Thread.currentThread().setContextClassLoader(GWT_MOCKITO_CLASS_LOADER);
+    Thread.currentThread().setContextClassLoader(gwtMockitoClassLoader);
     super.run(notifier);
     Thread.currentThread().setContextClassLoader(originalClassLoader);
   }
@@ -112,7 +199,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
    */
   @Override
   @SuppressWarnings("deprecation") // Currently the only way to support befores
-  protected Statement withBefores(FrameworkMethod method, Object target,
+  protected final Statement withBefores(FrameworkMethod method, Object target,
       Statement statement) {
     try {
       // Invoke initMocks on the version of GwtMockito that was loaded via our custom classloader.
@@ -126,11 +213,13 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
   }
 
   /** Custom classloader that performs additional modifications to loaded classes. */
-  private static class GwtMockitoClassLoader extends Loader implements Translator {
+  private final class GwtMockitoClassLoader extends Loader implements Translator {
 
     GwtMockitoClassLoader() {
       try {
-        addTranslator(ClassPool.getDefault(), this);
+        ClassPool classPool = new ClassPool();
+        classPool.appendSystemPath();
+        addTranslator(classPool, this);
       } catch (NotFoundException e) {
         throw new AssertionError("Impossible since this.start does not throw");
       } catch (CannotCompileException e) {
@@ -206,24 +295,20 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     }
 
     private boolean shouldStubMethod(CtMethod method) {
-      return
-          // Stub all native methods
-          (method.getModifiers() & Modifier.NATIVE) != 0
+      // Stub all non-abstract methods of classes for which stubbing has been requested
+      for (Class<?> clazz : getClassesToStub()) {
+        if (declaringClassIs(method, clazz) && (method.getModifiers() & Modifier.ABSTRACT) == 0) {
+          return true;
+        }
+      }
 
-          // Stub the static methods from DOM since they do lots of ugly DOM operations
-          || declaringClassIs(method, DOM.class)
-
-          // Stub methods from common base types so that things work when users extend them
-          || (method.getDeclaringClass().getPackageName().equals("com.google.gwt.user.client.ui")
-              && (declaringClassIs(method, UIObject.class)
-                  || declaringClassIs(method, Composite.class)
-                  || declaringClassIs(method, Widget.class)
-                  || method.getDeclaringClass().getName().endsWith("Panel"))
-              && (method.getModifiers() & Modifier.ABSTRACT) == 0);
+      // Always stub native methods
+      return (method.getModifiers() & Modifier.NATIVE) != 0;
     }
 
     private boolean declaringClassIs(CtMethod method, Class<?> clazz) {
-      return method.getDeclaringClass().getName().equals(clazz.getCanonicalName());
+      return method.getDeclaringClass().getName().replace('$', '.')
+          .equals(clazz.getCanonicalName());
     }
 
     @Override
