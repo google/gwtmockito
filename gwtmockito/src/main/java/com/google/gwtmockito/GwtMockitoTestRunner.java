@@ -62,6 +62,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A JUnit4 test runner that executes a test using GwtMockito. In addition to
@@ -178,6 +179,22 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
   }
 
   /**
+   * Returns a list of additional sources from which the classloader should read while running
+   * tests. By default this list is empty; custom sources can be specified by defining a custom test
+   * runner extending {@link GwtMockitoTestRunner} and overriding this method.
+   * <p>
+   * The entries in this list must be paths referencing a directory, jar, or zip file. The entries
+   * must not end with a "/". If an entry ends with "/*", then all jars matching the path name are
+   * included.
+   *
+   * @return a list of strings to be appended to the classpath used when running tests
+   * @see ClassPool#appendClassPath(String)
+   */
+  protected List<String> getAdditionalClasspaths() {
+    return new LinkedList<String>();
+  }
+
+  /**
    * Runs the tests in this runner, ensuring that the custom GwtMockito classloader is installed as
    * the context classloader.
    */
@@ -216,9 +233,19 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
   private final class GwtMockitoClassLoader extends Loader implements Translator {
 
     GwtMockitoClassLoader() {
+      // Build a fresh class pool with the system path and any user-specified paths
+      ClassPool classPool = new ClassPool();
+      classPool.appendSystemPath();
+      for (String path : getAdditionalClasspaths()) {
+        try {
+          classPool.appendClassPath(path);
+        } catch (NotFoundException e) {
+          throw new IllegalStateException("Cannot find classpath entry: " + path, e);
+        }
+      }
+
+      // Hook in a translator to be run whenever a class is loaded
       try {
-        ClassPool classPool = new ClassPool();
-        classPool.appendSystemPath();
         addTranslator(classPool, this);
       } catch (NotFoundException e) {
         throw new AssertionError("Impossible since this.start does not throw");
