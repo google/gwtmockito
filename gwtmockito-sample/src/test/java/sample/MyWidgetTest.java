@@ -72,7 +72,7 @@ public class MyWidgetTest {
     // implementations to be created. Normally you would do this in setUp.
     GwtMockito.useProviderForType(HasText.class, new FakeProvider<HasText>() {
       @Override
-      public HasText getFake(Class<? extends HasText> type) {
+      public HasText getFake(Class<?> type) {
         return new HasText() {
           private String text;
 

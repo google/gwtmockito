@@ -86,7 +86,7 @@ public class MyWidgetTestWithoutRunner {
   public void testSetNameWithFakes() {
     GwtMockito.useProviderForType(HasText.class, new FakeProvider<HasText>() {
       @Override
-      public HasText getFake(Class<? extends HasText> type) {
+      public HasText getFake(Class<?> type) {
         return new HasText() {
           private String text;
 
