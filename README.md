@@ -60,7 +60,7 @@ can be read from your unit tests, which lets you test this widget as follows:
 
 ```java
 @RunWith(GwtMockitoTestRunner.class)
-public class MyWidgetTest extends TestCase {
+public class MyWidgetTest {
 
   @Mock NumberFormatter formatter;
   private MyWidget widget;
