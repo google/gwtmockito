@@ -245,6 +245,25 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
   * For an example of using GwtMockito to test some example classes, see the
     [sample app][9].
 
+## Version history
+
+### 1.1.0
+  * Support for GWT-RPC by returning mock async interfaces when GWT.creating
+    the synchronous interface
+  * Support for testing widgets that expand Panel classes by automatically
+    stubbing Panel methods.
+  * Ability to customize classes that are automatically stubbed in order to
+    support widgets extending third-party base classes.
+  * Ability to customize the classloader and classpath used by GwtMockito for
+    better tool integration.
+  * More flexible FakeProviders that allow the returned type to be unrelated
+    to the input type. **Note that this can be a breaking change in some
+    cases: `getFake` should now just take a `Class<?>` instsead of a 
+    `Class<? extends T>`**. See [here][10] for an example.
+
+### 1.0.0
+  * Initial release
+
 [1]: https://code.google.com/p/mockito/
 [2]: http://google.github.io/gwtmockito/javadoc/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class,%20com.google.gwtmockito.fakes.FakeProvider)
 [3]: https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay
@@ -254,3 +273,4 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
 [7]: http://www.jboss.org/javassist/downloads
 [8]: http://google.github.io/gwtmockito/javadoc/
 [9]: https://github.com/google/gwtmockito/tree/master/sample
+[10]: https://github.com/google/gwtmockito/commit/52b5ddfc08df1b630cd1f241d2afaa08fed82a77
