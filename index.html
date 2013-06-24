@@ -30,7 +30,8 @@
 
       </header>
       <section>
-        <h2>What is GwtMockito?</h2>
+        <h2>
+<a name="what-is-gwtmockito" class="anchor" href="#what-is-gwtmockito"><span class="octicon octicon-link"></span></a>What is GwtMockito?</h2>
 
 <p>Testing GWT applications using <code>GWTTestCase</code> can be a pain - it's slower than
 using pure Java tests, and you can't use reflection-based tools like mocking
@@ -46,7 +47,8 @@ from within an initializer or constructor.
 <p>GwtMockito solves this and other GWT-related testing problems by allowing you
 to call GWT.create from JUnit tests, returning <a href="https://code.google.com/p/mockito/">Mockito</a> mocks.</p>
 
-<h2>How do I use it?</h2>
+<h2>
+<a name="how-do-i-use-it" class="anchor" href="#how-do-i-use-it"><span class="octicon octicon-link"></span></a>How do I use it?</h2>
 
 <p>Getting started with GwtMockito using Junit 4 is easy. Just annotate your test
 with <code>@RunWith(GwtMockitoTestRunner.class)</code>, then any calls to <code>GWT.create</code>
@@ -115,7 +117,8 @@ standard Mockito mocks to be mixed with mocks created by GwtMockito.</p>
 <p>That's all you need to know to get started - read on if you're interested in
 hearing about some advanced features.</p>
 
-<h3>Accessing the mock returned from GWT.create</h3>
+<h3>
+<a name="accessing-the-mock-returned-from-gwtcreate" class="anchor" href="#accessing-the-mock-returned-from-gwtcreate"><span class="octicon octicon-link"></span></a>Accessing the mock returned from GWT.create</h3>
 
 <p>Returning mocks from <code>GWT.create</code> isn't very useful if you don't have any way to
 verify or set behaviors on them. You can do this by annotating a field in your 
@@ -146,7 +149,8 @@ this:</p>
 <span class="o">}</span>
 </pre></div>
 
-<h3>Returning fake objects</h3>
+<h3>
+<a name="returning-fake-objects" class="anchor" href="#returning-fake-objects"><span class="octicon octicon-link"></span></a>Returning fake objects</h3>
 
 <p>By default, GwtMockito will return fake implementations (which don't require you
 to specify mock behavior) for any classes extending the following types:</p>
@@ -163,7 +167,8 @@ This will cause all calls to <code>GWT.create</code> for the given class or its 
 to invoke the given <code>FakeProvider</code> to determine what to return. See the
 <a href="http://google.github.io/gwtmockito/javadoc/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class,%20com.google.gwtmockito.fakes.FakeProvider)">javadoc reference</a> for more details.</p>
 
-<h3>Mocking final classes and methods</h3>
+<h3>
+<a name="mocking-final-classes-and-methods" class="anchor" href="#mocking-final-classes-and-methods"><span class="octicon octicon-link"></span></a>Mocking final classes and methods</h3>
 
 <p>Mockito does not normally allow final classes and methods to be mocked. This 
 poses problems in GWT since <a href="https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay">JavaScript overlay types</a> (which include 
@@ -186,7 +191,8 @@ classes and interfaces, so the following test will pass:</p>
 <p>As long as your test uses <code>GwtMockitoTestRunner</code>, it is possible to mock any
 final methods.</p>
 
-<h3>Dealing with native methods</h3>
+<h3>
+<a name="dealing-with-native-methods" class="anchor" href="#dealing-with-native-methods"><span class="octicon octicon-link"></span></a>Dealing with native methods</h3>
 
 <p>Under normal circumstances, JUnit tests will fail with an <code>UnsatisfiedLinkError</code> when encountering a native JSNI method. GwtMockito works around this problem
 using more classloader black magic to provide no-op implementations for all
@@ -207,7 +213,8 @@ As much as possible, you should isolate code that depends on JSNI into its own
 class, <a href="http://en.wikipedia.org/wiki/Dependency_injection">inject</a> that class into yours, and test the factored-out class using
 <code>GWTTestCase</code>.</p>
 
-<h3>Support for JUnit 3 and other tests that can't use custom runners</h3>
+<h3>
+<a name="support-for-junit-3-and-other-tests-that-cant-use-custom-runners" class="anchor" href="#support-for-junit-3-and-other-tests-that-cant-use-custom-runners"><span class="octicon octicon-link"></span></a>Support for JUnit 3 and other tests that can't use custom runners</h3>
 
 <p>Though <code>GwtMockitoTestRunner</code> is the easiest way to use GwtMockito, it won't
 work if you're using JUnit 3 or rely on another custom test runner. In these
@@ -250,7 +257,8 @@ call Javascript. Note that when testing in this way the features described in
 work - there is no way to mock final methods or automatically replace native
 methods without using <code>GwtMockitoTestRunner</code>.</p>
 
-<h2>How do I install it?</h2>
+<h2>
+<a name="how-do-i-install-it" class="anchor" href="#how-do-i-install-it"><span class="octicon octicon-link"></span></a>How do I install it?</h2>
 
 <p>If you're using Maven, you can add the following to your <code>&lt;dependencies&gt;</code>
 section:</p>
@@ -263,17 +271,42 @@ section:</p>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
 
-<p>You can also download the <a href="http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.0.0/gwtmockito-1.0.0.jar">jar</a> directly or check out the source using git
+<p>You can also download the <a href="http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.0.0/gwtm8ckito-1.0.0.jar">jar</a> directly or check out the source using git
 from <a href="https://github.com/google/gwtmockito.git">https://github.com/google/gwtmockito.git</a>. In these cases you will have
 to manually install the jars for <a href="https://code.google.com/p/mockito/downloads/list">Mockito</a> and <a href="http://www.jboss.org/javassist/downloads">Javassist</a>.</p>
 
-<h2>Where can I learn more?</h2>
+<h2>
+<a name="where-can-i-learn-more" class="anchor" href="#where-can-i-learn-more"><span class="octicon octicon-link"></span></a>Where can I learn more?</h2>
 
 <ul>
 <li>For more details on the GwtMockito API, consult the <a href="http://google.github.io/gwtmockito/javadoc/">Javadoc</a>
 </li>
 <li>For an example of using GwtMockito to test some example classes, see the
 <a href="https://github.com/google/gwtmockito/tree/master/sample">sample app</a>.</li>
+</ul><h2>
+<a name="version-history" class="anchor" href="#version-history"><span class="octicon octicon-link"></span></a>Version history</h2>
+
+<h3>
+<a name="110" class="anchor" href="#110"><span class="octicon octicon-link"></span></a>1.1.0</h3>
+
+<ul>
+<li>Support for GWT-RPC by returning mock async interfaces when GWT.creating
+the synchronous interface</li>
+<li>Support for testing widgets that expand Panel classes by automatically
+stubbing Panel methods.</li>
+<li>Ability to customize classes that are automatically stubbed in order to
+support widgets extending third-party base classes.</li>
+<li>Ability to customize the classloader and classpath used by GwtMockito for
+better tool integration.</li>
+<li>More flexible FakeProviders that allow the returned type to be unrelated
+to the input type. <strong>Note that this can be a breaking change in some
+cases: <code>getFake</code> should now just take a <code>Class&lt;?&gt;</code> instsead of a 
+<code>Class&lt;? extends T&gt;</code></strong>. See <a href="https://github.com/google/gwtmockito/commit/52b5ddfc08df1b630cd1f241d2afaa08fed82a77">here</a> for an example.</li>
+</ul><h3>
+<a name="100" class="anchor" href="#100"><span class="octicon octicon-link"></span></a>1.0.0</h3>
+
+<ul>
+<li>Initial release</li>
 </ul>
       </section>
       <footer>
