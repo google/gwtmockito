@@ -151,21 +151,27 @@ public class GwtMockito {
   }
 
   private static void registerGwtMocks(Object owner) {
-    for (Field field : owner.getClass().getDeclaredFields()) {
-      if (field.isAnnotationPresent(GwtMock.class)) {
-        Object mock = Mockito.mock(field.getType());
-        if (bridge.registeredMocks.containsKey(field.getType())) {
-          throw new IllegalArgumentException("Owner declares multiple @GwtMocks for type "
-              + field.getType().getSimpleName() + "; only one is allowed");
-        }
-        bridge.registeredMocks.put(field.getType(), mock);
-        field.setAccessible(true);
-        try {
-          field.set(owner, mock);
-        } catch (IllegalAccessException e) {
-          throw new IllegalStateException("Failed to make field accessible: " + field);
+    Class<? extends Object> clazz = owner.getClass();
+
+    while (!"java.lang.Object".equals(clazz.getName())) {
+      for (Field field : clazz.getDeclaredFields()) {
+        if (field.isAnnotationPresent(GwtMock.class)) {
+          Object mock = Mockito.mock(field.getType());
+          if (bridge.registeredMocks.containsKey(field.getType())) {
+            throw new IllegalArgumentException("Owner declares multiple @GwtMocks for type "
+                + field.getType().getSimpleName() + "; only one is allowed");
+          }
+          bridge.registeredMocks.put(field.getType(), mock);
+          field.setAccessible(true);
+          try {
+            field.set(owner, mock);
+          } catch (IllegalAccessException e) {
+            throw new IllegalStateException("Failed to make field accessible: " + field);
+          }
         }
       }
+
+      clazz = clazz.getSuperclass();
     }
   }
 
