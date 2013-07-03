@@ -19,4 +19,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface TestRemoteServiceAsync {
   void doRpc(String arg, AsyncCallback<String> callback);
+  void doRpcWithoutArgs(AsyncCallback<String> callback);
 }
