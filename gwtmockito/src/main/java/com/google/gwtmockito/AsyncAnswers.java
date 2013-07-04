@@ -43,7 +43,7 @@ public class AsyncAnswers {
       public Void answer(InvocationOnMock invocation) {
         for (Object arg : invocation.getArguments()) {
           if (arg instanceof AsyncCallback<?>) {
-            ((AsyncCallback<T>) invocation.getArguments()[1]).onSuccess(result);
+            ((AsyncCallback<T>) arg).onSuccess(result);
             return null;
           }
         }
@@ -67,7 +67,7 @@ public class AsyncAnswers {
       public Void answer(InvocationOnMock invocation) {
         for (Object arg : invocation.getArguments()) {
           if (arg instanceof AsyncCallback<?>) {
-            ((AsyncCallback<?>) invocation.getArguments()[1]).onFailure(result);
+            ((AsyncCallback<?>) arg).onFailure(result);
             return null;
           }
         }
