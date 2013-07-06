@@ -56,6 +56,25 @@ public class GwtMockitoRpcTest {
     }
   }
 
+  private static class MyWidgetWithoutArgs {
+    @UiField HasText message = GWT.create(Label.class);
+    private final TestRemoteServiceAsync service = GWT.create(TestRemoteService.class);
+
+    MyWidgetWithoutArgs() {
+      service.doRpcWithoutArgs(new AsyncCallback<String>() {
+        @Override
+        public void onSuccess(String result) {
+          message.setText(result);
+        }
+
+        @Override
+        public void onFailure(Throwable caught) {
+          message.setText(caught.getMessage());
+        }
+      });
+    }
+  }
+
   @GwtMock TestRemoteServiceAsync service;
 
   @Test
@@ -76,6 +95,28 @@ public class GwtMockitoRpcTest {
         .when(service).doRpc(any(String.class), any(AsyncCallback.class));
 
     MyWidget widget = new MyWidget();
+
+    verify(widget.message).setText("error!");
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void shouldAllowStubbedRpcSuccessWithoutArgs() throws Exception {
+    doAnswer(returnSuccess("success!"))
+        .when(service).doRpcWithoutArgs(any(AsyncCallback.class));
+
+    MyWidgetWithoutArgs widget = new MyWidgetWithoutArgs();
+
+    verify(widget.message).setText("success!");
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void shouldAllowStubbedRpcFailureWithoutArgs() throws Exception {
+    doAnswer(returnFailure(new IllegalArgumentException("error!")))
+        .when(service).doRpcWithoutArgs(any(AsyncCallback.class));
+
+    MyWidgetWithoutArgs widget = new MyWidgetWithoutArgs();
 
     verify(widget.message).setText("error!");
   }

@@ -19,4 +19,5 @@ import com.google.gwt.user.client.rpc.RemoteService;
 
 public interface TestRemoteService extends RemoteService {
   String doRpc(String arg);
+  String doRpcWithoutArgs();
 }
