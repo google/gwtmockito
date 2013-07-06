@@ -36,5 +36,13 @@
       <artifactId>javassist</artifactId>
     </dependency>
 
+    <!-- We don't actually depend on PowerMock, but we put it in the classpath
+         for tests to ensure that it doesn't cause a conflict. See
+         https://github.com/google/gwtmockito/issues/14. -->
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-mockito</artifactId>
+    </dependency>
+
   </dependencies>
 </project>

@@ -118,6 +118,12 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     }
     gwtMockitoClassLoader = new GwtMockitoClassLoader(getParentClassloader(), classPool);
 
+    // Use this custom classloader as the context classloader during the rest of the initialization
+    // process so that classes loaded via the context classloader will be compatible with the ones
+    // used during test.
+    ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
+    Thread.currentThread().setContextClassLoader(gwtMockitoClassLoader);
+
     try {
       // Reload the test class with our own custom class loader that does things like remove
       // final modifiers, allowing GWT Elements to be mocked. Also load GwtMockito itself so we can
@@ -133,6 +139,8 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
       testClassField.set(this, new TestClass(customLoadedTestClass));
     } catch (Exception e) {
       throw new InitializationError(e);
+    } finally {
+      Thread.currentThread().setContextClassLoader(originalClassLoader);
     }
   }
 
@@ -231,8 +239,11 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     // classloader than the class being mocked.
     ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
     Thread.currentThread().setContextClassLoader(gwtMockitoClassLoader);
-    super.run(notifier);
-    Thread.currentThread().setContextClassLoader(originalClassLoader);
+    try {
+      super.run(notifier);
+    } finally {
+      Thread.currentThread().setContextClassLoader(originalClassLoader);
+    }
   }
 
   /**
