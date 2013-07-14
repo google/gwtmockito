@@ -1,0 +1,89 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package com.google.gwtmockito.fakes;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    import com.google.gwtmockito.GwtMockito;<a name="line.3"></a>
+<FONT color="green">004</FONT>    <a name="line.4"></a>
+<FONT color="green">005</FONT>    /**<a name="line.5"></a>
+<FONT color="green">006</FONT>     * Interface implemented by an object capable of providing fake instances of a<a name="line.6"></a>
+<FONT color="green">007</FONT>     * given type. Instances of this interface must be registered via<a name="line.7"></a>
+<FONT color="green">008</FONT>     * {@link GwtMockito#useProviderForType}.<a name="line.8"></a>
+<FONT color="green">009</FONT>     *<a name="line.9"></a>
+<FONT color="green">010</FONT>     * @param &lt;T&gt; type that this interface can provide<a name="line.10"></a>
+<FONT color="green">011</FONT>     * @author ekuefler@google.com (Erik Kuefler)<a name="line.11"></a>
+<FONT color="green">012</FONT>     */<a name="line.12"></a>
+<FONT color="green">013</FONT>    public interface FakeProvider&lt;T&gt; {<a name="line.13"></a>
+<FONT color="green">014</FONT>      /**<a name="line.14"></a>
+<FONT color="green">015</FONT>       * Returns a fake implementation of the given type.<a name="line.15"></a>
+<FONT color="green">016</FONT>       *<a name="line.16"></a>
+<FONT color="green">017</FONT>       * @param type the actual type passed to GWT.create. Usually this is the same<a name="line.17"></a>
+<FONT color="green">018</FONT>       *             as T, but it could be a subtype or a completely unrelated type<a name="line.18"></a>
+<FONT color="green">019</FONT>       *             depending on how {@link GwtMockito#useProviderForType} was<a name="line.19"></a>
+<FONT color="green">020</FONT>       *             called.<a name="line.20"></a>
+<FONT color="green">021</FONT>       */<a name="line.21"></a>
+<FONT color="green">022</FONT>      T getFake(Class&lt;?&gt; type);<a name="line.22"></a>
+<FONT color="green">023</FONT>    }<a name="line.23"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>
