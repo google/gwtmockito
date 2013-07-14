@@ -231,7 +231,7 @@ section:
 <dependency>
   <groupId>com.google.gwt.gwtmockito</groupId>
   <artifactId>gwtmockito</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.1</version>
   <scope>test</scope>
 </dependency>
 ```
