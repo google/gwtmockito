@@ -247,6 +247,12 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
 
 ## Version history
 
+### 1.1.1
+  * Fix for a bug in `AsyncAnswers`. (Thanks to tinamou)
+  * Mock `@GwtMock` fields in superclasses the same way that Mockito does.
+    (Thanks to justinmk)
+  * Fix for a conflict with PowerMock.
+
 ### 1.1.0
   * Support for GWT-RPC by returning mock async interfaces when GWT.creating
     the synchronous interface
