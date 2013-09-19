@@ -48,6 +48,7 @@ import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Button;
@@ -430,6 +431,12 @@ public class GwtMockitoTest {
     assertEquals("abc", label.getText());
   }
 
+  @Test
+  public void testCanCreateUiBindersWithParameterizedTypes() throws Exception {
+    ParameterizedTypeUiBinder binder = GWT.create(ParameterizedTypeUiBinder.class);
+    assertNotNull(binder.createAndBindUi(this));
+  }
+
   static class PackagePrivateClass {
     String doStuff() {
       return "not mocked";
@@ -437,6 +444,7 @@ public class GwtMockitoTest {
   }
 
   interface SomeUiBinder extends UiBinder<Widget, Object> {}
+  interface ParameterizedTypeUiBinder extends UiBinder<DataGrid<String>, Object> {}
 
   private interface SampleInterface {
     String doSomething();

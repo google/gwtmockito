@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,8 +72,12 @@ public class FakeUiBinderProvider implements FakeProvider<UiBinder<?, ?>>{
   private <T> Class<?> getUiRootType(Class<T> type) {
     // The UI root type is the first generic type parameter of the UiBinder
     ParameterizedType parameterizedType = (ParameterizedType) type.getGenericInterfaces()[0];
-    Class<?> uiRootType = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-    return uiRootType;
+    Type uiRootType = parameterizedType.getActualTypeArguments()[0];
+    if (uiRootType instanceof ParameterizedType) {
+      return (Class<?>) ((ParameterizedType) uiRootType).getRawType();
+    } else {
+      return (Class<?>) uiRootType;
+    }
   }
 
   private List<Field> getAllFields(Class<?> type) {
