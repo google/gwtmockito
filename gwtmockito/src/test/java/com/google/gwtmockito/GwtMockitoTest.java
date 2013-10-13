@@ -437,6 +437,68 @@ public class GwtMockitoTest {
     assertNotNull(binder.createAndBindUi(this));
   }
 
+  @Test
+  public void shouldAlwaysUseMostSpecificProvider() {
+    GwtMockito.useProviderForType(AnotherInterface.class, new FakeProvider<AnotherInterface>() {
+      @Override
+      public AnotherInterface getFake(Class<?> type) {
+        AnotherInterface mock = (AnotherInterface) mock(type);
+        when(mock.doSomethingElse()).thenReturn("anotherInterface");
+        return mock;
+      }
+    });
+    SubSubInterface i = GWT.create(SubSubInterface.class);
+    assertEquals("anotherInterface", i.doSomethingElse());
+
+    GwtMockito.useProviderForType(SubInterface.class, new FakeProvider<SubInterface>() {
+      @Override
+      public SubInterface getFake(Class<?> type) {
+        SubInterface mock = (SubInterface) mock(type);
+        when(mock.doSomethingElse()).thenReturn("subInterface");
+        return mock;
+      }
+    });
+    i = GWT.create(SubSubInterface.class);
+    assertEquals("subInterface", i.doSomethingElse());
+
+    GwtMockito.useProviderForType(SubSubInterface.class, new FakeProvider<SubSubInterface>() {
+      @Override
+      public SubSubInterface getFake(Class<?> type) {
+        SubSubInterface mock = (SubSubInterface) mock(type);
+        when(mock.doSomethingElse()).thenReturn("subSubInterface");
+        return mock;
+      }
+    });
+    i = GWT.create(SubSubInterface.class);
+    assertEquals("subSubInterface", i.doSomethingElse());
+  }
+
+  @Test
+  public void shouldFailForAmbiguousProviders() {
+    GwtMockito.useProviderForType(AnotherInterface.class, new FakeProvider<AnotherInterface>() {
+      @Override
+      public AnotherInterface getFake(Class<?> type) {
+        return mock(AnotherInterface.class);
+      }
+    });
+    GwtMockito.useProviderForType(YetAnotherInterface.class,
+        new FakeProvider<YetAnotherInterface>() {
+      @Override
+      public YetAnotherInterface getFake(Class<?> type) {
+        return mock(YetAnotherInterface.class);
+      }
+    });
+
+    try {
+      GWT.create(AmbiguousInterface.class);
+      fail("Exception not thrown");
+    } catch (IllegalArgumentException e) {
+      assertTrue(e.getMessage().contains("AmbiguousInterface"));
+      assertTrue(e.getMessage().contains("AnotherInterface"));
+      assertTrue(e.getMessage().contains("YetAnotherInterface"));
+    }
+  }
+
   static class PackagePrivateClass {
     String doStuff() {
       return "not mocked";
@@ -453,6 +515,16 @@ public class GwtMockitoTest {
   private interface AnotherInterface {
     String doSomethingElse();
   }
+
+  private interface YetAnotherInterface {
+    String doSomethingElseAgain();
+  }
+
+  private interface SubInterface extends AnotherInterface {}
+
+  private interface SubSubInterface extends SubInterface {}
+
+  private interface AmbiguousInterface extends AnotherInterface, YetAnotherInterface {}
 
   interface SampleMessages extends Messages {
     String noArgs();

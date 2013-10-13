@@ -38,8 +38,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * A library to make Mockito-based testing of GWT applications easier. Most
@@ -135,7 +137,10 @@ public class GwtMockito {
 
   /**
    * Specifies that the given provider should be used to GWT.create instances of
-   * the given type and its subclasses. Note that if you just want to return a
+   * the given type and its subclasses. If multiple providers could produce a
+   * given class (for example, if a provide is registered for a type and its
+   * supertype), the provider for the more specific type is chosen. An exception
+   * is thrown if this type is ambiguous. Note that if you just want to return a
    * Mockito mock from GWT.create, it's probably easier to use {@link GwtMock}
    * instead.
    */
@@ -220,25 +225,55 @@ public class GwtMockito {
         return (T) registeredMocks.get(type);
       }
 
-      // Then check for the exact type provider.
-      if (registeredProviders.containsKey(type)) {
-          // Its safe - it's the same type provider
-          @SuppressWarnings({"rawtypes", "cast"})
-          return (T) entry.getValue().getFake(type);
-      }
-
-      // Next see if we have a provider for this type or a supertype.
+      // Next see if we have any providers for this type or its supertypes.
+      Map<Class<?>, FakeProvider<?>> legalProviders = new HashMap<Class<?>, FakeProvider<?>>();
       for (Entry<Class<?>, FakeProvider<?>> entry : registeredProviders.entrySet()) {
         if (entry.getKey().isAssignableFrom(type)) {
-          // We know this is safe since we just checked that the type can be assigned to the entry
-          @SuppressWarnings({"rawtypes", "cast"})
-          Class rawType = (Class) type;
-          return (T) entry.getValue().getFake(rawType);
+          legalProviders.put(entry.getKey(), entry.getValue());
         }
+      }
+
+      // Filter the set of legal providers to the most specific type.
+      Map<Class<?>, FakeProvider<?>> filteredProviders = new HashMap<Class<?>, FakeProvider<?>>();
+      for (Entry<Class<?>, FakeProvider<?>> candidate : legalProviders.entrySet()) {
+        boolean isSpecific = true;
+        for (Entry<Class<?>, FakeProvider<?>> other : legalProviders.entrySet()) {
+          if (candidate != other && candidate.getKey().isAssignableFrom(other.getKey())) {
+            isSpecific = false;
+            break;
+          }
+        }
+        if (isSpecific) {
+          filteredProviders.put(candidate.getKey(), candidate.getValue());
+        }
+      }
+
+      // If exactly one provider remains, use it.
+      if (filteredProviders.size() == 1) {
+        // We know this is safe since we checked that the types are assignable
+        @SuppressWarnings({"rawtypes", "cast"})
+        Class rawType = (Class) type;
+        return (T) filteredProviders.values().iterator().next().getFake(rawType);
+      } else if (filteredProviders.size() > 1) {
+        throw new IllegalArgumentException("Can't decide which provider to use for " +
+            type.getSimpleName() +
+            ", it could be provided as any of the following: " +
+            mapToSimpleNames(filteredProviders.keySet()) +
+            ". Add a provider for " +
+            type.getSimpleName() +
+            " to resolve this ambiguity.");
       }
 
       // If nothing has been registered, just return a new mock object to avoid NPEs.
       return (T) mock(type, new ReturnsCustomMocks());
+    }
+
+    private Set<String> mapToSimpleNames(Set<Class<?>> classes) {
+      Set<String> simpleNames = new HashSet<String>();
+      for (Class<?> clazz : classes) {
+        simpleNames.add(clazz.getSimpleName());
+      }
+      return simpleNames;
     }
 
     @Override
