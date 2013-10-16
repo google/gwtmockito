@@ -231,7 +231,7 @@ section:
 <dependency>
   <groupId>com.google.gwt.gwtmockito</groupId>
   <artifactId>gwtmockito</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -246,6 +246,12 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
     [sample app][9].
 
 ## Version history
+
+### 1.1.2
+  * Fix for UiBinders that generate parameterized widgets.
+  * Fix to always use the most specific provider available when multiple
+    providers could provide a type. (Thanks to reimei)
+  * Compatability with EMMA code coverage tools.
 
 ### 1.1.1
   * Fix for a bug in `AsyncAnswers`. (Thanks to tinamou)
@@ -274,7 +280,7 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
 [2]: http://google.github.io/gwtmockito/javadoc/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class,%20com.google.gwtmockito.fakes.FakeProvider)
 [3]: https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay
 [4]: http://en.wikipedia.org/wiki/Dependency_injection
-[5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.1/gwtmockito-1.1.1.jar
+[5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.2/gwtmockito-1.1.2.jar
 [6]: https://code.google.com/p/mockito/downloads/list
 [7]: http://www.jboss.org/javassist/downloads
 [8]: http://google.github.io/gwtmockito/javadoc/
