@@ -280,10 +280,10 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
 
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
-      // Always use the standard loader to load junit classes, otherwise the rest of junit
+      // Always use the standard loader to load junit and EMMA classes, otherwise the rest of junit
       // (specifically the ParentRunner) won't be able to recognize things like @Test and @Before
       // annotations in the relaoded class.
-      if (name.startsWith("org.junit")) {
+      if (name.startsWith("org.junit") || name.startsWith("com.vladium")) {
         return GwtMockitoTestRunner.class.getClassLoader().loadClass(name);
       }
       return super.loadClass(name);
