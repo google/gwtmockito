@@ -54,7 +54,7 @@ to call GWT.create from JUnit tests, returning <a href="https://code.google.com/
 with <code>@RunWith(GwtMockitoTestRunner.class)</code>, then any calls to <code>GWT.create</code>
 encountered will return Mockito mocks instead of throwing exceptions:</p>
 
-<div class="highlight"><pre><span class="nd">@RunWith</span><span class="o">(</span><span class="n">GwtMockitoTestRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<div class="highlight highlight-java"><pre><span class="nd">@RunWith</span><span class="o">(</span><span class="n">GwtMockitoTestRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyTest</span> <span class="o">{</span>
   <span class="nd">@Test</span>
   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">shouldReturnMocksFromGwtCreate</span><span class="o">()</span> <span class="o">{</span>
@@ -69,7 +69,7 @@ encountered will return Mockito mocks instead of throwing exceptions:</p>
 populate <code>@UiField</code>s with Mockito mocks. Suppose you have a widget that looks
 like this:</p>
 
-<div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyWidget</span> <span class="kd">extends</span> <span class="n">Composite</span> <span class="o">{</span>
+<div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyWidget</span> <span class="kd">extends</span> <span class="n">Composite</span> <span class="o">{</span>
   <span class="kd">interface</span> <span class="nc">MyUiBinder</span> <span class="kd">extends</span> <span class="n">UiBinder</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">,</span> <span class="n">MyWidget</span><span class="o">&gt;</span> <span class="o">{}</span>
   <span class="kd">private</span> <span class="kd">final</span> <span class="n">MyUiBinder</span> <span class="n">uiBinder</span> <span class="o">=</span> <span class="n">GWT</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">MyUiBinder</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 
@@ -91,7 +91,7 @@ like this:</p>
 <code>numberLabel</code> with a mock object. Since <code>@UiField</code>s are package-visible, they 
 can be read from your unit tests, which lets you test this widget as follows:</p>
 
-<div class="highlight"><pre><span class="nd">@RunWith</span><span class="o">(</span><span class="n">GwtMockitoTestRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<div class="highlight highlight-java"><pre><span class="nd">@RunWith</span><span class="o">(</span><span class="n">GwtMockitoTestRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyWidgetTest</span> <span class="o">{</span>
 
   <span class="nd">@Mock</span> <span class="n">NumberFormatter</span> <span class="n">formatter</span><span class="o">;</span>
@@ -126,7 +126,7 @@ test with <code>@GwtMock</code> - this will cause all calls to <code>GWT.create<
 to return a mock stored in that field, allowing you to reference it in your
 test. So if you have a class that looks like</p>
 
-<div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyClass</span> <span class="o">{</span>
+<div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyClass</span> <span class="o">{</span>
   <span class="kd">public</span> <span class="nf">MyClass</span><span class="o">()</span> <span class="o">{</span>
     <span class="n">SomeInterface</span> <span class="n">myInterface</span> <span class="o">=</span> <span class="n">GWT</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">SomeInterface</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
     <span class="n">myInterface</span><span class="o">.</span><span class="na">setSomething</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
@@ -137,7 +137,7 @@ test. So if you have a class that looks like</p>
 <p>then you can verify that it works correctly by writing a test that looks like
 this:</p>
 
-<div class="highlight"><pre><span class="nd">@RunWith</span><span class="o">(</span><span class="n">GwtMockitoTestRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<div class="highlight highlight-java"><pre><span class="nd">@RunWith</span><span class="o">(</span><span class="n">GwtMockitoTestRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyClassTest</span> <span class="o">{</span>
   <span class="nd">@GwtMock</span> <span class="n">SomeInterface</span> <span class="n">mockInterface</span><span class="o">;</span>
 
@@ -176,7 +176,7 @@ poses problems in GWT since <a href="https://developers.google.com/web-toolkit/d
 GwtMockito does some classloader black magic to remove all final modifiers from
 classes and interfaces, so the following test will pass:</p>
 
-<div class="highlight"><pre><span class="nd">@RunWith</span><span class="o">(</span><span class="n">GwtMockitoTestRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<div class="highlight highlight-java"><pre><span class="nd">@RunWith</span><span class="o">(</span><span class="n">GwtMockitoTestRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyTest</span> <span class="o">{</span>
   <span class="nd">@Mock</span> <span class="n">Element</span> <span class="n">element</span><span class="o">;</span>
 
@@ -221,7 +221,7 @@ work if you're using JUnit 3 or rely on another custom test runner. In these
 situations, you can still get most of the benefit of GwtMockito by calling
 <code>GwtMockito.initMocks</code> directly. A test written in this style looks like this:</p>
 
-<div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyWidgetTest</span> <span class="kd">extends</span> <span class="n">TestCase</span> <span class="o">{</span>
+<div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyWidgetTest</span> <span class="kd">extends</span> <span class="n">TestCase</span> <span class="o">{</span>
 
   <span class="kd">private</span> <span class="n">MyWidget</span> <span class="n">widget</span><span class="o">;</span>
 
@@ -263,15 +263,15 @@ methods without using <code>GwtMockitoTestRunner</code>.</p>
 <p>If you're using Maven, you can add the following to your <code>&lt;dependencies&gt;</code>
 section:</p>
 
-<div class="highlight"><pre><span class="nt">&lt;dependency&gt;</span>
+<div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>com.google.gwt.gwtmockito<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>gwtmockito<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>1.1.1<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;version&gt;</span>1.1.2<span class="nt">&lt;/version&gt;</span>
   <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
 
-<p>You can also download the <a href="http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.0.0/gwtm8ckito-1.0.0.jar">jar</a> directly or check out the source using git
+<p>You can also download the <a href="http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.2/gwtmockito-1.1.2.jar">jar</a> directly or check out the source using git
 from <a href="https://github.com/google/gwtmockito.git">https://github.com/google/gwtmockito.git</a>. In these cases you will have
 to manually install the jars for <a href="https://code.google.com/p/mockito/downloads/list">Mockito</a> and <a href="http://www.jboss.org/javassist/downloads">Javassist</a>.</p>
 
@@ -287,6 +287,14 @@ to manually install the jars for <a href="https://code.google.com/p/mockito/down
 <a name="version-history" class="anchor" href="#version-history"><span class="octicon octicon-link"></span></a>Version history</h2>
 
 <h3>
+<a name="112" class="anchor" href="#112"><span class="octicon octicon-link"></span></a>1.1.2</h3>
+
+<ul>
+<li>Fix for UiBinders that generate parameterized widgets.</li>
+<li>Fix to always use the most specific provider available when multiple
+providers could provide a type. (Thanks to reimei)</li>
+<li>Compatability with EMMA code coverage tools.</li>
+</ul><h3>
 <a name="111" class="anchor" href="#111"><span class="octicon octicon-link"></span></a>1.1.1</h3>
 
 <ul>
