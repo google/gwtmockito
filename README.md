@@ -250,7 +250,7 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
 ### 1.1.2
   * Fix for UiBinders that generate parameterized widgets.
   * Fix to always use the most specific provider available when multiple
-    providers could provide a type. (Thanks to reimei)
+    providers could provide a type. (Thanks to reimai)
   * Compatability with EMMA code coverage tools.
 
 ### 1.1.1
