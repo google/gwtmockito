@@ -19,6 +19,7 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
@@ -52,6 +53,19 @@ public class MyWidget extends Composite {
 
   public void updateData() {
     data.setText(dataProvider.getData());
+  }
+
+  public void loadDataFromRpc() {
+    MyServiceAsync service = GWT.create(MyService.class);
+    service.getData(new AsyncCallback<String>() {
+      @Override
+      public void onSuccess(String result) {
+        data.setText(result);
+      }
+
+      @Override
+      public void onFailure(Throwable caught) {}
+    });
   }
 
   native Element doStuffInJavaScript() /*-{

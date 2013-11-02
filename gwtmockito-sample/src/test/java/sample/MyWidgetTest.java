@@ -15,10 +15,14 @@
  */
 package sample;
 
+import static com.google.gwtmockito.AsyncAnswers.returnSuccess;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwtmockito.GwtMock;
 import com.google.gwtmockito.GwtMockito;
@@ -38,6 +42,7 @@ import sample.MyWidget.DataProvider;
 public class MyWidgetTest {
 
   @GwtMock private DataProvider dataProvider;
+  @GwtMock private MyServiceAsync myService;
 
   private MyWidget widget;
 
@@ -92,5 +97,13 @@ public class MyWidgetTest {
 
     widget.setName("John", "Smith");
     assertEquals("John Smith", widget.name.getText());
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testMockRpcs() {
+    doAnswer(returnSuccess("some data")).when(myService).getData(any(AsyncCallback.class));
+    widget.loadDataFromRpc();
+    verify(widget.data).setText("some data");
   }
 }

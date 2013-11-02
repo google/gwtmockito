@@ -31,7 +31,11 @@ public class AsyncAnswers {
   /**
    * Invokes {@link AsyncCallback#onSuccess} on the first argument of type {@link AsyncCallback}
    * passed to the method. The method must take an {@link AsyncCallback} parameter of the
-   * appropriate type.
+   * appropriate type. Used like this:
+   *
+   * <pre>
+   *   doAnswer(returnSuccess("some data")).when(myService).getData(any(AsyncCallback.class));
+   * </pre>
    *
    * @param result argument to pass to onSuccess
    * @return an answer that invokes onSuccess with the given argument
@@ -56,7 +60,11 @@ public class AsyncAnswers {
   /**
    * Invokes {@link AsyncCallback#onFailure} on the first argument of type {@link AsyncCallback}
    * passed to the method. The method must take an {@link AsyncCallback} parameter of the
-   * appropriate type.
+   * appropriate type. Used like this:
+   *
+   * <pre>
+   *   doAnswer(returnFailure(new IOException())).when(myService).getData(any(AsyncCallback.class));
+   * </pre>
    *
    * @param result argument to pass to onFailure
    * @return an answer that invokes onFailure with the given argument
