@@ -284,5 +284,5 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
 [6]: https://code.google.com/p/mockito/downloads/list
 [7]: http://www.jboss.org/javassist/downloads
 [8]: http://google.github.io/gwtmockito/javadoc/
-[9]: https://github.com/google/gwtmockito/tree/master/sample
+[9]: https://github.com/google/gwtmockito/tree/master/gwtmockito-sample/src
 [10]: https://github.com/google/gwtmockito/commit/52b5ddfc08df1b630cd1f241d2afaa08fed82a77
