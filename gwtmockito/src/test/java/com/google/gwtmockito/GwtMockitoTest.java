@@ -59,6 +59,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwtmockito.fakes.FakeProvider;
 
 import org.hamcrest.BaseMatcher;
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.junit.Assert;
 import org.junit.Before;
@@ -497,6 +498,12 @@ public class GwtMockitoTest {
       assertTrue(e.getMessage().contains("AnotherInterface"));
       assertTrue(e.getMessage().contains("YetAnotherInterface"));
     }
+  }
+
+  @Test
+  public void assertThatShouldWork() {
+    // This fails when org.hamcrest isn't added to the package blacklist
+    Assert.assertThat("123", CoreMatchers.containsString("12"));
   }
 
   static class PackagePrivateClass {

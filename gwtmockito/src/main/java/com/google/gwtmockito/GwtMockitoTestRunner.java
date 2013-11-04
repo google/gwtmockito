@@ -200,6 +200,34 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
   }
 
   /**
+   * Returns a list of package names that should always be loaded via the standard system
+   * classloader instead of through GwtMockito's custom classloader. Any subpackages of these
+   * packages will also be loaded with the standard loader. If you're getting
+   * "loader constraint violation" errors, try defining a new runner class that overrides this
+   * method and adds the package the error is complaining about. If you do this, you will probably
+   * want to retain the packages that are blacklisted by default by doing something like this:
+   *
+   * <pre>
+   * &#064;Override
+   * protected Collection&lt;String;&gt; getPackagesToLoadViaStandardClassloader() {
+   *   Collection&lt;String&gt; packages = super.getPackagesToLoadViaStandardClassloader();
+   *   packages.add("my.package");
+   *   return packages;
+   * }
+   * </pre>
+   *
+   * @return a collection of strings such that any class whose fully-qualified name starts with a
+   *         string in the collection will always be loaded via the system classloader
+   */
+  protected Collection<String> getPackagesToLoadViaStandardClassloader() {
+    Collection<String> packages = new LinkedList<String>();
+    packages.add("com.vladium"); // To support EMMA code coverage tools
+    packages.add("org.hamcrest"); // Since this package is referenced directly from org.junit
+    packages.add("org.junit"); // Make sure the ParentRunner can recognize annotations like @Test
+    return packages;
+  }
+
+  /**
    * Returns the classloader to use as the parent of GwtMockito's classloader. By default this is
    * the system classloader. This can be customized by defining a custom test runner extending
    * {@link GwtMockitoTestRunner} and overriding this method.
@@ -280,12 +308,14 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
 
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
-      // Always use the standard loader to load junit and EMMA classes, otherwise the rest of junit
-      // (specifically the ParentRunner) won't be able to recognize things like @Test and @Before
-      // annotations in the relaoded class.
-      if (name.startsWith("org.junit") || name.startsWith("com.vladium")) {
-        return GwtMockitoTestRunner.class.getClassLoader().loadClass(name);
+      // If the class is in a blacklisted package, load it with the default classloader.
+      for (String blacklistedPackage : getPackagesToLoadViaStandardClassloader()) {
+        if (name.startsWith(blacklistedPackage)) {
+          return GwtMockitoTestRunner.class.getClassLoader().loadClass(name);
+        }
       }
+
+      // Otherwise load it with our custom classloader.
       return super.loadClass(name);
     }
 
