@@ -506,6 +506,39 @@ public class GwtMockitoTest {
     Assert.assertThat("123", CoreMatchers.containsString("12"));
   }
 
+  @Test
+  public void getFakeShouldReturnDefaultFakes() {
+    SampleMessages messages = GwtMockito.getFake(SampleMessages.class);
+    assertEquals("noArgs", messages.noArgs());
+  }
+
+  @Test
+  public void getFakeShouldReturnRegisteredFakes() {
+    GwtMockito.useProviderForType(
+        AnotherInterface.class,
+        new FakeProvider<AnotherInterface>() {
+          @Override
+          public AnotherInterface getFake(Class<?> type) {
+            AnotherInterface mock = mock(AnotherInterface.class);
+            when(mock.doSomethingElse()).thenReturn("string");
+            return mock;
+          }});
+
+    AnotherInterface fake = GwtMockito.getFake(AnotherInterface.class);
+
+    assertEquals("string", fake.doSomethingElse());
+  }
+
+  @Test
+  public void getFakeShouldFailForUnregisteredFakes() {
+    try {
+      GwtMockito.getFake(SampleInterface.class);
+      fail("Exception not thrown");
+    } catch (IllegalArgumentException e) {
+      assertTrue(e.getMessage().contains("SampleInterface"));
+    }
+  }
+
   static class PackagePrivateClass {
     String doStuff() {
       return "not mocked";

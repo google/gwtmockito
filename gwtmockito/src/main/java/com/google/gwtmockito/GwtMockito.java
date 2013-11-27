@@ -89,6 +89,17 @@ import java.util.Set;
  */
 public class GwtMockito {
 
+  private static final Map<Class<?>, FakeProvider<?>> DEFAULT_FAKE_PROVIDERS =
+      new HashMap<Class<?>, FakeProvider<?>>();
+  static {
+    DEFAULT_FAKE_PROVIDERS.put(ClientBundle.class, new FakeClientBundleProvider());
+    DEFAULT_FAKE_PROVIDERS.put(CssResource.class, new FakeMessagesProvider<CssResource>());
+    DEFAULT_FAKE_PROVIDERS.put(Messages.class, new FakeMessagesProvider<Messages>());
+    DEFAULT_FAKE_PROVIDERS.put(
+        SafeHtmlTemplates.class, new FakeMessagesProvider<SafeHtmlTemplates>());
+    DEFAULT_FAKE_PROVIDERS.put(UiBinder.class, new FakeUiBinderProvider());
+  }
+
   private static Bridge bridge;
 
   /**
@@ -105,11 +116,9 @@ public class GwtMockito {
   public static void initMocks(Object owner) {
     // Create a new bridge and register built-in type providers
     bridge = new Bridge();
-    useProviderForType(ClientBundle.class, new FakeClientBundleProvider());
-    useProviderForType(CssResource.class, new FakeMessagesProvider<CssResource>());
-    useProviderForType(Messages.class, new FakeMessagesProvider<Messages>());
-    useProviderForType(SafeHtmlTemplates.class, new FakeMessagesProvider<SafeHtmlTemplates>());
-    useProviderForType(UiBinder.class, new FakeUiBinderProvider());
+    for (Entry<Class<?>, FakeProvider<?>> entry : DEFAULT_FAKE_PROVIDERS.entrySet()) {
+      useProviderForType(entry.getKey(), entry.getValue());
+    }
 
     // Install the bridge and populate mock fields
     boolean success = false;
@@ -155,6 +164,30 @@ public class GwtMockito {
     bridge.registeredProviders.put(type, provider);
   }
 
+  /**
+   * Returns a new fake object of the given type assuming a fake provider is
+   * available for that type. Additional fake providers can be registered via
+   * {@link #useProviderForType}.
+   *
+   * @param type type to get a fake object for
+   * @return a fake of the given type, as returned by an applicable provider
+   * @throws IllegalArgumentException if no provider for the given type (or one
+   *                                  of its superclasses) has been registered
+   */
+  public static <T> T getFake(Class<T> type) {
+    // If initMocks hasn't been called, read from the default fake provider map. This allows static
+    // fields to be initialized with fakes in tests that don't use the GwtMockito test runner.
+    T fake = getFakeFromProviderMap(
+        type,
+        bridge != null ? bridge.registeredProviders : DEFAULT_FAKE_PROVIDERS);
+    if (fake == null) {
+      throw new IllegalArgumentException("No fake provider has been registered "
+          + "for " + type.getSimpleName() + ". Call useProviderForType to "
+          + "register a provider before calling getFake.");
+    }
+    return fake;
+  }
+
   private static void registerGwtMocks(Object owner) {
     Class<? extends Object> clazz = owner.getClass();
 
@@ -196,6 +229,57 @@ public class GwtMockito {
     }
   }
 
+  private static <T> T getFakeFromProviderMap(Class<T> type, Map<Class<?>, FakeProvider<?>> map) {
+      // See if we have any providers for this type or its supertypes.
+      Map<Class<?>, FakeProvider<?>> legalProviders = new HashMap<Class<?>, FakeProvider<?>>();
+      for (Entry<Class<?>, FakeProvider<?>> entry : map.entrySet()) {
+        if (entry.getKey().isAssignableFrom(type)) {
+          legalProviders.put(entry.getKey(), entry.getValue());
+        }
+      }
+
+      // Filter the set of legal providers to the most specific type.
+      Map<Class<?>, FakeProvider<?>> filteredProviders = new HashMap<Class<?>, FakeProvider<?>>();
+      for (Entry<Class<?>, FakeProvider<?>> candidate : legalProviders.entrySet()) {
+        boolean isSpecific = true;
+        for (Entry<Class<?>, FakeProvider<?>> other : legalProviders.entrySet()) {
+          if (candidate != other && candidate.getKey().isAssignableFrom(other.getKey())) {
+            isSpecific = false;
+            break;
+          }
+        }
+        if (isSpecific) {
+          filteredProviders.put(candidate.getKey(), candidate.getValue());
+        }
+      }
+
+      // If exactly one provider remains, use it.
+      if (filteredProviders.size() == 1) {
+        // We know this is safe since we checked that the types are assignable
+        @SuppressWarnings({"rawtypes", "cast"})
+        Class rawType = (Class) type;
+        return (T) filteredProviders.values().iterator().next().getFake(rawType);
+      } else if (filteredProviders.isEmpty()) {
+        return null;
+      } else {
+        throw new IllegalArgumentException("Can't decide which provider to use for " +
+            type.getSimpleName() +
+            ", it could be provided as any of the following: " +
+            mapToSimpleNames(filteredProviders.keySet()) +
+            ". Add a provider for " +
+            type.getSimpleName() +
+            " to resolve this ambiguity.");
+      }
+  }
+
+    private static Set<String> mapToSimpleNames(Set<Class<?>> classes) {
+      Set<String> simpleNames = new HashSet<String>();
+      for (Class<?> clazz : classes) {
+        simpleNames.add(clazz.getSimpleName());
+      }
+      return simpleNames;
+    }
+
   private static class Bridge extends GWTBridge {
     private final Map<Class<?>, FakeProvider<?>> registeredProviders =
         new HashMap<Class<?>, FakeProvider<?>>();
@@ -225,55 +309,14 @@ public class GwtMockito {
         return (T) registeredMocks.get(type);
       }
 
-      // Next see if we have any providers for this type or its supertypes.
-      Map<Class<?>, FakeProvider<?>> legalProviders = new HashMap<Class<?>, FakeProvider<?>>();
-      for (Entry<Class<?>, FakeProvider<?>> entry : registeredProviders.entrySet()) {
-        if (entry.getKey().isAssignableFrom(type)) {
-          legalProviders.put(entry.getKey(), entry.getValue());
-        }
-      }
-
-      // Filter the set of legal providers to the most specific type.
-      Map<Class<?>, FakeProvider<?>> filteredProviders = new HashMap<Class<?>, FakeProvider<?>>();
-      for (Entry<Class<?>, FakeProvider<?>> candidate : legalProviders.entrySet()) {
-        boolean isSpecific = true;
-        for (Entry<Class<?>, FakeProvider<?>> other : legalProviders.entrySet()) {
-          if (candidate != other && candidate.getKey().isAssignableFrom(other.getKey())) {
-            isSpecific = false;
-            break;
-          }
-        }
-        if (isSpecific) {
-          filteredProviders.put(candidate.getKey(), candidate.getValue());
-        }
-      }
-
-      // If exactly one provider remains, use it.
-      if (filteredProviders.size() == 1) {
-        // We know this is safe since we checked that the types are assignable
-        @SuppressWarnings({"rawtypes", "cast"})
-        Class rawType = (Class) type;
-        return (T) filteredProviders.values().iterator().next().getFake(rawType);
-      } else if (filteredProviders.size() > 1) {
-        throw new IllegalArgumentException("Can't decide which provider to use for " +
-            type.getSimpleName() +
-            ", it could be provided as any of the following: " +
-            mapToSimpleNames(filteredProviders.keySet()) +
-            ". Add a provider for " +
-            type.getSimpleName() +
-            " to resolve this ambiguity.");
+      // Next check if we have a fake provider that can provide a fake for this type.
+      T fake = (T) getFakeFromProviderMap(type, registeredProviders);
+      if (fake != null) {
+        return fake;
       }
 
       // If nothing has been registered, just return a new mock object to avoid NPEs.
       return (T) mock(type, new ReturnsCustomMocks());
-    }
-
-    private Set<String> mapToSimpleNames(Set<Class<?>> classes) {
-      Set<String> simpleNames = new HashSet<String>();
-      for (Class<?> clazz : classes) {
-        simpleNames.add(clazz.getSimpleName());
-      }
-      return simpleNames;
     }
 
     @Override

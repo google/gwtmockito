@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.i18n.client.Messages;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -41,6 +42,7 @@ import org.junit.runners.JUnit4;
 public class GwtMockitoRunnerlessTest {
 
   @GwtMock SampleInterface mockedInterface;
+  private static final SampleMessages MESSAGES = GwtMockito.getFake(SampleMessages.class);
 
   @Before
   public void setUp() {
@@ -94,12 +96,21 @@ public class GwtMockitoRunnerlessTest {
     GWT.create(SampleInterface.class);
   }
 
+  @Test
+  public void shouldHandleStaticallyInitializedFakes() {
+    assertEquals("message", MESSAGES.message());
+  }
+
   private interface SampleInterface {
     String doSomething();
   }
 
   private interface AnotherInterface {
     String doSomethingElse();
+  }
+
+  private interface SampleMessages extends Messages {
+    String message();
   }
 
   private static class SampleWidget extends Composite {
