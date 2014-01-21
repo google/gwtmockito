@@ -18,6 +18,7 @@ package com.google.gwtmockito;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.CtConstructor;
 import javassist.CtMethod;
 import javassist.Loader;
 import javassist.NotFoundException;
@@ -37,6 +38,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.LabelBase;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -185,6 +187,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     classes.add(FocusPanel.class);
     classes.add(HorizontalPanel.class);
     classes.add(HTMLPanel.class);
+    classes.add(LabelBase.class);
     classes.add(LayoutPanel.class);
     classes.add(Panel.class);
     classes.add(PopupPanel.class);
@@ -369,6 +372,28 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
           }
         }
       }
+
+      // Also stub certain constructors
+      for (Class<?> classToStub : getClassesToStub()) {
+        if (classToStub.getName().equals(clazz.getName())) {
+          for (CtConstructor constructor : clazz.getConstructors()) {
+            String parameters = makeNullParameters(
+                clazz.getSuperclass().getConstructors()[0].getParameterTypes().length);
+            constructor.setBody("super(" + parameters + ");");
+          }
+        }
+      }
+    }
+
+    private String makeNullParameters(int count) {
+      if (count == 0) {
+        return "";
+      }
+      StringBuilder params = new StringBuilder();
+      for (int i = 0; i < count; i++) {
+        params.append(",null");
+      }
+      return params.substring(1).toString();
     }
 
     private boolean typeIs(CtClass type, Class<?> clazz) {

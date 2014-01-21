@@ -53,6 +53,9 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.InlineHTML;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -537,6 +540,14 @@ public class GwtMockitoTest {
     } catch (IllegalArgumentException e) {
       assertTrue(e.getMessage().contains("SampleInterface"));
     }
+  }
+
+  @Test
+  public void shouldBeAbleToInstantiateLabels() {
+    assertNotNull(new Label());
+    assertNotNull(new HTML());
+    assertNotNull(new InlineLabel());
+    assertNotNull(new InlineHTML());
   }
 
   static class PackagePrivateClass {
