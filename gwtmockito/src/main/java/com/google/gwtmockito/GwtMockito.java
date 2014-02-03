@@ -197,7 +197,8 @@ public class GwtMockito {
           Object mock = Mockito.mock(field.getType());
           if (bridge.registeredMocks.containsKey(field.getType())) {
             throw new IllegalArgumentException("Owner declares multiple @GwtMocks for type "
-                + field.getType().getSimpleName() + "; only one is allowed");
+                + field.getType().getSimpleName() + "; only one is allowed. Did you mean to "
+                + "use a standard @Mock?");
           }
           bridge.registeredMocks.put(field.getType(), mock);
           field.setAccessible(true);
