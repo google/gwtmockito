@@ -62,6 +62,7 @@ import org.junit.runners.model.TestClass;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,6 +98,7 @@ import java.util.List;
  */
 public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
 
+  private final Class<?> unitTestClass;
   private final ClassLoader gwtMockitoClassLoader;
   private final Class<?> customLoadedGwtMockito;
 
@@ -106,6 +108,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
    */
   public GwtMockitoTestRunner(Class<?> unitTestClass) throws InitializationError {
     super(unitTestClass);
+    this.unitTestClass = unitTestClass;
 
     // Build a fresh class pool with the system path and any user-specified paths and use it to
     // create the custom classloader
@@ -149,13 +152,15 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
   /**
    * Returns a collection of classes whose non-abstract methods should always be replaced with
    * no-ops. By default, this list includes {@link Composite}, {@link DOM} {@link UIObject},
-   * {@link Widget}, and most subclasses of {@link Panel}. This makes it much safer to test code
-   * that uses or extends these types.
+   * {@link Widget}, and most subclasses of {@link Panel}. It will also include any classes
+   * specified via the {@link WithClassesToStub} annotation on the test class. This makes it much
+   * safer to test code that uses or extends these types.
    * <p>
-   * This list can be customized by defining a new test runner extending
-   * {@link GwtMockitoTestRunner} and overriding this method. This allows users to explicitly stub
-   * out particular classes that are causing problems in tests. If you do this, you will probably
-   * want to retain the classes that are stubbed here by doing something like this:
+   * This list can be customized via {@link WithClassesToStub} or by defining a new test runner
+   * extending {@link GwtMockitoTestRunner} and overriding this method. This allows users to
+   * explicitly stub out particular classes that are causing problems in tests. If you override this
+   * method, you will probably want to retain the classes that are stubbed here by doing something
+   * like this:
    *
    * <pre>
    * &#064;Override
@@ -198,6 +203,11 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     classes.add(SplitLayoutPanel.class);
     classes.add(StackPanel.class);
     classes.add(VerticalPanel.class);
+
+    WithClassesToStub annotation = unitTestClass.getAnnotation(WithClassesToStub.class);
+    if (annotation != null) {
+      classes.addAll(Arrays.asList(annotation.value()));
+    }
 
     return classes;
   }
