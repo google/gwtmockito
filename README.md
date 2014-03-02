@@ -231,7 +231,7 @@ section:
 <dependency>
   <groupId>com.google.gwt.gwtmockito</groupId>
   <artifactId>gwtmockito</artifactId>
-  <version>1.1.2</version>
+  <version>1.1.3</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -246,6 +246,16 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
     [sample app][9].
 
 ## Version history
+
+### 1.1.3
+  * Support for Hamcrest matchers.
+  * Added a method to specify packages that should never be reloaded.
+  * Added a getFake method to provide direct access to registered fakes.
+  * Fixed assertion errors in classes extending LabelBase.
+  * Added an annotation allowing stubbed classes to be specified on a
+    per-test basis (suggested by danielkaneider)
+  * Support for GWT 2.6.
+  * Fix to allow FakeProviders to be specified for RPC interfaces.
 
 ### 1.1.2
   * Fix for UiBinders that generate parameterized widgets.
@@ -280,7 +290,7 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
 [2]: http://google.github.io/gwtmockito/javadoc/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class,%20com.google.gwtmockito.fakes.FakeProvider)
 [3]: https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay
 [4]: http://en.wikipedia.org/wiki/Dependency_injection
-[5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.2/gwtmockito-1.1.2.jar
+[5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.3/gwtmockito-1.1.3.jar
 [6]: https://code.google.com/p/mockito/downloads/list
 [7]: http://www.jboss.org/javassist/downloads
 [8]: http://google.github.io/gwtmockito/javadoc/
