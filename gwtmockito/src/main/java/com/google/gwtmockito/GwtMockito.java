@@ -288,36 +288,27 @@ public class GwtMockito {
 
     @Override
     @SuppressWarnings("unchecked") // safe since we check whether the type is assignable
-    public <T> T create(Class<?> type) {
-      // Handle RemoteServices specially - GWT.create'ing them should return the Async version
-      if (RemoteService.class.isAssignableFrom(type)) {
-        Class<?> asyncType;
-        try {
-          asyncType = Class.forName(type.getCanonicalName() + "Async");
-        } catch (ClassNotFoundException e) {
-          throw new IllegalArgumentException(
-              type.getCanonicalName() + " does not have a corresponding async interface", e);
-        }
-        if (registeredMocks.containsKey(asyncType)) {
-          return (T) registeredMocks.get(asyncType);
-        } else {
-          return (T) mock(asyncType);
-        }
+    public <T> T create(Class<?> createdType) {
+      // If we're creating a RemoteService, assume that the result of GWT.create is being assigned
+      // to the async version of that service. Otherwise, assume it's being assigned to the same
+      // type we're creating.
+      Class<?> assignedType = RemoteService.class.isAssignableFrom(createdType)
+          ? getAsyncType((Class<? extends RemoteService>) createdType)
+          : createdType;
+
+      // First check if we have a GwtMock for this exact being assigned to and use it if so.
+      if (registeredMocks.containsKey(assignedType)) {
+        return (T) registeredMocks.get(assignedType);
       }
 
-      // Otherwise, first check if we have a GwtMock for this exact type and use it if so.
-      if (registeredMocks.containsKey(type)) {
-        return (T) registeredMocks.get(type);
-      }
-
-      // Next check if we have a fake provider that can provide a fake for this type.
-      T fake = (T) getFakeFromProviderMap(type, registeredProviders);
+      // Next check if we have a fake provider that can provide a fake for the type being created.
+      T fake = (T) getFakeFromProviderMap(createdType, registeredProviders);
       if (fake != null) {
         return fake;
       }
 
-      // If nothing has been registered, just return a new mock object to avoid NPEs.
-      return (T) mock(type, new ReturnsCustomMocks());
+      // If nothing has been registered, just return a new mock for the type being assigned.
+      return (T) mock(assignedType, new ReturnsCustomMocks());
     }
 
     @Override
@@ -337,5 +328,18 @@ public class GwtMockito {
         e.printStackTrace();
       }
     }
+
+    /** Returns the corresponding async service type for the given remote service type. */
+    private Class<?> getAsyncType(Class<? extends RemoteService> type) {
+      Class<?> asyncType;
+      try {
+        asyncType = Class.forName(type.getCanonicalName() + "Async");
+      } catch (ClassNotFoundException e) {
+        throw new IllegalArgumentException(
+            type.getCanonicalName() + " does not have a corresponding async interface", e);
+      }
+      return asyncType;
+    }
+
   }
 }

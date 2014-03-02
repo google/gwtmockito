@@ -15,11 +15,12 @@
  */
 package com.google.gwtmockito.rpc;
 
-import static com.google.gwtmockito.AsyncAnswers.returnFailure;
 import static com.google.gwtmockito.AsyncAnswers.returnSuccess;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import com.google.gwt.core.shared.GWT;
@@ -27,7 +28,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwtmockito.GwtMock;
 import com.google.gwtmockito.GwtMockito;
 import com.google.gwtmockito.GwtMockitoTestRunner;
 import com.google.gwtmockito.fakes.FakeProvider;
@@ -36,34 +36,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Tests that GwtMockito works when mocking gwt-rpc RemoteServices.
+ * Tests that GwtMockito works when mocking gwt-rpc RemoteServices without a corresponding
+ * GwtMock-annoted field.
  */
 @RunWith(GwtMockitoTestRunner.class)
-public class GwtMockitoRpcTest {
+public class GwtMockitoRpcWithoutGwtMockTest {
 
   private static class MyWidget {
     @UiField HasText message = GWT.create(Label.class);
     private final TestRemoteServiceAsync service = GWT.create(TestRemoteService.class);
 
     MyWidget() {
-      service.doRpc("arg", new AsyncCallback<String>() {
-        @Override
-        public void onSuccess(String result) {
-          message.setText(result);
-        }
-        @Override
-        public void onFailure(Throwable caught) {
-          message.setText(caught.getMessage());
-        }
-      });
-    }
-  }
-
-  private static class MyWidgetWithoutArgs {
-    @UiField HasText message = GWT.create(Label.class);
-    private final TestRemoteServiceAsync service = GWT.create(TestRemoteService.class);
-
-    MyWidgetWithoutArgs() {
       service.doRpcWithoutArgs(new AsyncCallback<String>() {
         @Override
         public void onSuccess(String result) {
@@ -78,50 +61,15 @@ public class GwtMockitoRpcTest {
     }
   }
 
-  @GwtMock TestRemoteServiceAsync service;
-
   @Test
-  public void shouldAllowStubbedRpcSuccess() throws Exception {
-    doAnswer(returnSuccess("success!")).when(service).doRpc(any(String.class), anyAsyncCallback());
-
+  public void shouldNeverCallBackIfNoFake() throws Exception {
     MyWidget widget = new MyWidget();
 
-    verify(widget.message).setText("success!");
+    verify(widget.message, never()).setText(anyString());
   }
 
   @Test
-  public void shouldAllowStubbedRpcFailure() throws Exception {
-    doAnswer(returnFailure(new IllegalArgumentException("error!")))
-        .when(service).doRpc(any(String.class), anyAsyncCallback());
-
-    MyWidget widget = new MyWidget();
-
-    verify(widget.message).setText("error!");
-  }
-
-  @Test
-  public void shouldAllowStubbedRpcSuccessWithoutArgs() throws Exception {
-    doAnswer(returnSuccess("success!")).when(service).doRpcWithoutArgs(anyAsyncCallback());
-
-    MyWidgetWithoutArgs widget = new MyWidgetWithoutArgs();
-
-    verify(widget.message).setText("success!");
-  }
-
-  @Test
-  public void shouldAllowStubbedRpcFailureWithoutArgs() throws Exception {
-    doAnswer(returnFailure(new IllegalArgumentException("error!")))
-        .when(service).doRpcWithoutArgs(anyAsyncCallback());
-
-    MyWidgetWithoutArgs widget = new MyWidgetWithoutArgs();
-
-    verify(widget.message).setText("error!");
-  }
-
-  @Test
-  public void gwtMockShouldTakePriorityOverFakes() {
-    doAnswer(returnSuccess("mocked")).when(service).doRpcWithoutArgs(anyAsyncCallback());
-
+  public void shouldUseFakeIfProvided() {
     GwtMockito.useProviderForType(
         TestRemoteService.class,
         new FakeProvider<TestRemoteServiceAsync>() {
@@ -132,9 +80,9 @@ public class GwtMockitoRpcTest {
             return mock;
           }
         });
-    MyWidgetWithoutArgs widget = new MyWidgetWithoutArgs();
+    MyWidget widget = new MyWidget();
 
-    verify(widget.message).setText("mocked");
+    verify(widget.message).setText("faked");
   }
 
   @SuppressWarnings("unchecked")
