@@ -24,6 +24,7 @@ import javassist.Loader;
 import javassist.NotFoundException;
 import javassist.Translator;
 
+import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.CellPanel;
@@ -181,6 +182,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     classes.add(Widget.class);
 
     classes.add(AbsolutePanel.class);
+    classes.add(CellList.class);
     classes.add(CellPanel.class);
     classes.add(ComplexPanel.class);
     classes.add(DeckLayoutPanel.class);
@@ -388,20 +390,40 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
         if (classToStub.getName().equals(clazz.getName())) {
           for (CtConstructor constructor : clazz.getConstructors()) {
             String parameters = makeNullParameters(
-                clazz.getSuperclass().getConstructors()[0].getParameterTypes().length);
+                clazz.getSuperclass().getConstructors()[0].getParameterTypes());
             constructor.setBody("super(" + parameters + ");");
           }
         }
       }
     }
 
-    private String makeNullParameters(int count) {
-      if (count == 0) {
+    private String makeNullParameters(CtClass[] paramClasses) {
+      if (paramClasses.length == 0) {
         return "";
       }
       StringBuilder params = new StringBuilder();
-      for (int i = 0; i < count; i++) {
-        params.append(",null");
+      for (CtClass paramClass : paramClasses) {
+        params.append(",");
+        String className = paramClass.getName();
+        if (className.equals("boolean")) {
+          params.append("false");
+        } else if (className.equals("byte")) {
+          params.append("(byte) 0");
+        } else if (className.equals("char")) {
+          params.append("(char) 0");
+        } else if (className.equals("double")) {
+          params.append("(double) 0");
+        } else if (className.equals("int")) {
+          params.append("(int) 0");
+        } else if (className.equals("float")) {
+          params.append("(float) 0");
+        } else if (className.equals("long")) {
+          params.append("(long) 0");
+        } else if (className.equals("short")) {
+          params.append("(short) 0");
+        } else {
+          params.append("null");
+        }
       }
       return params.substring(1).toString();
     }

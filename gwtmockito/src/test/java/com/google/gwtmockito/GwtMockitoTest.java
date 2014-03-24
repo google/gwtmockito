@@ -25,6 +25,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.DivElement;
@@ -43,11 +44,13 @@ import com.google.gwt.resources.client.ResourceCallback;
 import com.google.gwt.resources.client.ResourceException;
 import com.google.gwt.resources.client.TextResource;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
@@ -548,6 +551,14 @@ public class GwtMockitoTest {
     assertNotNull(new HTML());
     assertNotNull(new InlineLabel());
     assertNotNull(new InlineHTML());
+  }
+
+  @Test
+  public void shouldBeAbleToInstantiateCellLists() {
+    assertNotNull(new CellList<String>(new AbstractCell<String>() {
+      @Override
+      public void render(Context context, String value, SafeHtmlBuilder sb) {}
+    }));
   }
 
   static class PackagePrivateClass {
