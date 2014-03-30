@@ -25,6 +25,7 @@ import javassist.NotFoundException;
 import javassist.Translator;
 
 import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.CellPanel;
@@ -184,6 +185,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     classes.add(AbsolutePanel.class);
     classes.add(CellList.class);
     classes.add(CellPanel.class);
+    classes.add(CellTable.class);
     classes.add(ComplexPanel.class);
     classes.add(DeckLayoutPanel.class);
     classes.add(DeckPanel.class);
