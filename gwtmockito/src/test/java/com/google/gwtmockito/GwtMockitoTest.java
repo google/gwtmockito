@@ -34,6 +34,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.IFrameElement;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.i18n.client.BidiPolicy;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.Messages;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
@@ -73,6 +74,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.mockito.Mock;
+
+import java.util.Date;
 
 /**
  * Tests for {@link GwtMockito} when running with {@link GwtMockitoTestRunner}.
@@ -559,6 +562,13 @@ public class GwtMockitoTest {
       @Override
       public void render(Context context, String value, SafeHtmlBuilder sb) {}
     }));
+  }
+
+  @Test
+  @SuppressWarnings("deprecation")
+  public void shouldBeAbleToFormatDatesWithAmPm() {
+    DateTimeFormat formatter = DateTimeFormat.getFormat("yyyy/MM/dd hh:mm:ss a");
+    assertEquals("1992/11/09 12:34:56 PM", formatter.format(new Date(92, 10, 9, 12, 34, 56)));
   }
 
   static class PackagePrivateClass {
