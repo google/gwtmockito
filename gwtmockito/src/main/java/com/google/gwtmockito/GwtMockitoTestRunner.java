@@ -40,7 +40,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.LabelBase;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -196,7 +195,6 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     classes.add(FocusPanel.class);
     classes.add(HorizontalPanel.class);
     classes.add(HTMLPanel.class);
-    classes.add(LabelBase.class);
     classes.add(LayoutPanel.class);
     classes.add(Panel.class);
     classes.add(PopupPanel.class);

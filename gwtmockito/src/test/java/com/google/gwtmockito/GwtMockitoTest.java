@@ -557,6 +557,19 @@ public class GwtMockitoTest {
   }
 
   @Test
+  public void shouldBeAbleToSetHtml() {
+    new HTML().setHTML("html");
+    new HTML().setHTML(SafeHtmlUtils.fromSafeConstant("html"));
+  }
+
+  @Test
+  public void shouldReturnRealElementTagNames() {
+    assertEquals("div", Document.get().createDivElement().getTagName());
+    assertEquals("span", Document.get().createSpanElement().getTagName());
+    assertEquals("iframe", Document.get().createIFrameElement().getTagName());
+  }
+
+  @Test
   public void shouldBeAbleToInstantiateCellLists() {
     assertNotNull(new CellList<String>(new AbstractCell<String>() {
       @Override

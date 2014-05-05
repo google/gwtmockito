@@ -16,6 +16,7 @@
 package com.google.gwtmockito.impl;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.dom.client.Element;
 
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMocks;
 import org.mockito.invocation.InvocationOnMock;
@@ -35,9 +36,12 @@ public class ReturnsCustomMocks extends ReturnsMocks {
     // instead of a new mock of type JavaScriptObject. This allows cast to be used in situations
     // that don't violate the Java type system, but not in situations that do (even though
     // javascript would allow them).
-    if (invocation.getMock() instanceof JavaScriptObject
-        && invocation.getMethod().getName().equals("cast")) {
+    String methodName = invocation.getMethod().getName();
+    if (invocation.getMock() instanceof JavaScriptObject && methodName.equals("cast")) {
       return invocation.getMock();
+    } else if (invocation.getMock() instanceof Element && methodName.equals("getTagName")) {
+      String className = invocation.getMock().getClass().getSimpleName();
+      return className.substring(0, className.indexOf("Element")).toLowerCase();
     } else {
       return super.answer(invocation);
     }
