@@ -378,10 +378,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
 
           } else {
             // Return mocks for all other methods
-            method.setBody(String.format(
-                "return (%1$s) org.mockito.Mockito.mock("
-                    + "%1$s.class, new com.google.gwtmockito.impl.ReturnsCustomMocks());",
-                returnType.getName()));
+            method.setBody(String.format("return %s;", newMockForClassSnippet(returnType)));
           }
         }
       }
@@ -423,10 +420,17 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
         } else if (className.equals("short")) {
           params.append("(short) 0");
         } else {
-          params.append("null");
+          params.append(newMockForClassSnippet(paramClass));
         }
       }
       return params.substring(1).toString();
+    }
+
+    private String newMockForClassSnippet(CtClass paramClass) {
+      return String.format(
+          "(%1$s) org.mockito.Mockito.mock("
+              + "%1$s.class, new com.google.gwtmockito.impl.ReturnsCustomMocks())",
+          paramClass.getName());
     }
 
     private boolean typeIs(CtClass type, Class<?> clazz) {

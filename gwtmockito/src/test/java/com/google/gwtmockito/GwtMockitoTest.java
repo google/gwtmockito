@@ -52,6 +52,7 @@ import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
@@ -582,6 +583,12 @@ public class GwtMockitoTest {
   public void shouldBeAbleToFormatDatesWithAmPm() {
     DateTimeFormat formatter = DateTimeFormat.getFormat("yyyy/MM/dd hh:mm:ss a");
     assertEquals("1992/11/09 12:34:56 PM", formatter.format(new Date(92, 10, 9, 12, 34, 56)));
+  }
+
+  @Test
+  @SuppressWarnings("unused")
+  public void shouldBeAbleToCreateCellTables() {
+    new CellTable<String>();
   }
 
   static class PackagePrivateClass {
