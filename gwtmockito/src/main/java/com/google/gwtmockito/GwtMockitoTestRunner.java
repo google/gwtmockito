@@ -40,6 +40,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -153,9 +154,9 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
   /**
    * Returns a collection of classes whose non-abstract methods should always be replaced with
    * no-ops. By default, this list includes {@link Composite}, {@link DOM} {@link UIObject},
-   * {@link Widget}, and most subclasses of {@link Panel}. It will also include any classes
-   * specified via the {@link WithClassesToStub} annotation on the test class. This makes it much
-   * safer to test code that uses or extends these types.
+   * {@link Widget}, {@link Image}, and most subclasses of {@link Panel}. It will also include any
+   * classes specified via the {@link WithClassesToStub} annotation on the test class. This makes
+   * it much safer to test code that uses or extends these types.
    * <p>
    * This list can be customized via {@link WithClassesToStub} or by defining a new test runner
    * extending {@link GwtMockitoTestRunner} and overriding this method. This allows users to
@@ -180,6 +181,8 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     classes.add(DOM.class);
     classes.add(UIObject.class);
     classes.add(Widget.class);
+
+    classes.add(Image.class);
 
     classes.add(AbsolutePanel.class);
     classes.add(CellList.class);

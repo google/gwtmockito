@@ -59,6 +59,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
@@ -583,6 +584,12 @@ public class GwtMockitoTest {
   public void shouldBeAbleToFormatDatesWithAmPm() {
     DateTimeFormat formatter = DateTimeFormat.getFormat("yyyy/MM/dd hh:mm:ss a");
     assertEquals("1992/11/09 12:34:56 PM", formatter.format(new Date(92, 10, 9, 12, 34, 56)));
+  }
+
+  @Test
+  @SuppressWarnings("unused")
+  public void shouldBeAbleToCreateImages() {
+    new Image("url");
   }
 
   @Test
