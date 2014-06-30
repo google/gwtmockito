@@ -53,6 +53,7 @@ import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwtmockito.impl.StubGenerator;
 
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -351,7 +352,14 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
 
       // Create stub implementations for certain methods
       for (CtMethod method : clazz.getDeclaredMethods()) {
-        if (shouldStubMethod(method)) {
+        if (StubGenerator.shouldStub(method)) {
+          method.setBody(String.format(
+              "return (%s) com.google.gwtmockito.impl.StubGenerator.invoke(\"%s\", \"%s\");",
+              method.getReturnType().getName(),
+              clazz.getName(),
+              method.getName()));
+        // TODO(ekuefler): fold the below code into StubGenerator
+        } else if (shouldStubMethod(method)) {
           method.setModifiers(method.getModifiers() & ~Modifier.NATIVE);
           CtClass returnType = method.getReturnType();
 

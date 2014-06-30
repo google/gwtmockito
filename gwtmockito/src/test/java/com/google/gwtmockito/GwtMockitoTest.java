@@ -56,6 +56,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
@@ -596,6 +597,12 @@ public class GwtMockitoTest {
   @SuppressWarnings("unused")
   public void shouldBeAbleToCreateCellTables() {
     new CellTable<String>();
+  }
+
+  @Test
+  @SuppressWarnings("unused")
+  public void shouldBeAbleToCreateAnchors() {
+    new Anchor();
   }
 
   static class PackagePrivateClass {
