@@ -352,44 +352,22 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
 
       // Create stub implementations for certain methods
       for (CtMethod method : clazz.getDeclaredMethods()) {
-        if (StubGenerator.shouldStub(method)) {
-          method.setBody(String.format(
-              "return (%s) com.google.gwtmockito.impl.StubGenerator.invoke(\"%s\", \"%s\");",
-              method.getReturnType().getName(),
-              clazz.getName(),
-              method.getName()));
-        // TODO(ekuefler): fold the below code into StubGenerator
-        } else if (shouldStubMethod(method)) {
+        if (StubGenerator.shouldStub(method, getClassesToStub())) {
           method.setModifiers(method.getModifiers() & ~Modifier.NATIVE);
           CtClass returnType = method.getReturnType();
-
-          if (typeIs(returnType, String.class)) {
-            method.setBody("return \"\";");
-          } else if (typeIs(returnType, Boolean.class)) {
-            method.setBody(String.format("return Boolean.FALSE;"));
-          } else if (typeIs(returnType, Byte.class)) {
-            method.setBody(String.format("return Byte.valueOf((byte) 0);"));
-          } else if (typeIs(returnType, Character.class)) {
-            method.setBody(String.format("return Character.valueOf((char) 0);"));
-          } else if (typeIs(returnType, Double.class)) {
-            method.setBody(String.format("return Double.valueOf(0.0);"));
-          } else if (typeIs(returnType, Integer.class)) {
-            method.setBody(String.format("return Integer.valueOf(0);"));
-          } else if (typeIs(returnType, Float.class)) {
-            method.setBody(String.format("return Float.valueOf(0f);"));
-          } else if (typeIs(returnType, Long.class)) {
-            method.setBody(String.format("return Long.valueOf(0L);"));
-          } else if (typeIs(returnType, Short.class)) {
-            method.setBody(String.format("return Short.valueOf((short) 0);"));
-
-          } else if (returnType.isPrimitive()) {
+          // TODO(ekuefler): Handle primitives, voids, and enums in StubGenerator
+          if (returnType.isPrimitive() || returnType.getName().equals("void")) {
             method.setBody(null);
           } else if (returnType.isEnum()) {
             method.setBody(String.format("return %s.values()[0];", returnType.getName()));
-
           } else {
-            // Return mocks for all other methods
-            method.setBody(String.format("return %s;", newMockForClassSnippet(returnType)));
+            method.setBody(String.format(
+                "return (%s) com.google.gwtmockito.impl.StubGenerator.invoke("
+                    + "Class.forName(\"%s\"), \"%s\", \"%s\");",
+                method.getReturnType().getName(),
+                method.getReturnType().getName(),
+                clazz.getName(),
+                method.getName()));
           }
         }
       }
@@ -442,27 +420,6 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
           "(%1$s) org.mockito.Mockito.mock("
               + "%1$s.class, new com.google.gwtmockito.impl.ReturnsCustomMocks())",
           paramClass.getName());
-    }
-
-    private boolean typeIs(CtClass type, Class<?> clazz) {
-      return type.getName().equals(clazz.getCanonicalName());
-    }
-
-    private boolean shouldStubMethod(CtMethod method) {
-      // Stub all non-abstract methods of classes for which stubbing has been requested
-      for (Class<?> clazz : getClassesToStub()) {
-        if (declaringClassIs(method, clazz) && (method.getModifiers() & Modifier.ABSTRACT) == 0) {
-          return true;
-        }
-      }
-
-      // Always stub native methods
-      return (method.getModifiers() & Modifier.NATIVE) != 0;
-    }
-
-    private boolean declaringClassIs(CtMethod method, Class<?> clazz) {
-      return method.getDeclaringClass().getName().replace('$', '.')
-          .equals(clazz.getCanonicalName());
     }
 
     @Override

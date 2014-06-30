@@ -23,13 +23,15 @@ import com.google.gwt.user.client.ui.Anchor;
 
 import org.mockito.Mockito;
 
+import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.Map;
 
 /**
  * Generates stub implementations for built-in GWT methods whose behavior we
  * want to replace.
  * <p>
- * This class is public so that it can be refernced by generated code - users
+ * This class is public so that it can be referenced by generated code - users
  * should not reference it directly.
  *
  * @author ekuefler@google.com (Erik Kuefler)
@@ -49,14 +51,62 @@ public class StubGenerator {
   }
 
   /** Returns whether the behavior of the given method should be replaced. */
-  public static boolean shouldStub(CtMethod method) {
-    return STUB_METHODS.containsKey(new ClassAndMethod(
-        method.getDeclaringClass().getName(), method.getName()));
+  public static boolean shouldStub(CtMethod method, Collection<Class<?>> classesToStub) {
+    // Stub any methods for which we have given explicit implementations
+    if (STUB_METHODS.containsKey(new ClassAndMethod(
+        method.getDeclaringClass().getName(), method.getName()))) {
+      return true;
+    }
+
+    // Stub all non-abstract methods of classes for which stubbing has been requested
+    for (Class<?> clazz : classesToStub) {
+      if (declaringClassIs(method, clazz) && (method.getModifiers() & Modifier.ABSTRACT) == 0) {
+        return true;
+      }
+    }
+
+    // Stub all native methods
+    if ((method.getModifiers() & Modifier.NATIVE) != 0) {
+      return true;
+    }
+
+    return false;
   }
 
   /** Invokes the stubbed behavior of the given method. */
-  public static Object invoke(String className, String methodName) {
-    return STUB_METHODS.get(new ClassAndMethod(className, methodName)).invoke();
+  public static Object invoke(Class<?> returnType, String className, String methodName) {
+    // If we have an explicit implementation for this method, invoke it
+    if (STUB_METHODS.containsKey(new ClassAndMethod(className, methodName))) {
+      return STUB_METHODS.get(new ClassAndMethod(className, methodName)).invoke();
+    }
+
+    // Otherwise return an appropriate basic type
+    if (returnType == String.class) {
+      return "";
+    } else if (returnType == Boolean.class) {
+      return false;
+    } else if (returnType == Byte.class) {
+      return (byte) 0;
+    } else if (returnType == Character.class) {
+      return (char) 0;
+    } else if (returnType == Double.class) {
+      return (double) 0;
+    } else if (returnType == Integer.class) {
+      return (int) 0;
+    } else if (returnType == Float.class) {
+      return (float) 0;
+    } else if (returnType == Long.class) {
+      return (long) 0;
+    } else if (returnType == Short.class) {
+      return (short) 0;
+    } else {
+      return Mockito.mock(returnType, new ReturnsCustomMocks());
+    }
+  }
+
+  private static boolean declaringClassIs(CtMethod method, Class<?> clazz) {
+    return method.getDeclaringClass().getName().replace('$', '.')
+        .equals(clazz.getCanonicalName());
   }
 
   /** Map key composed of a class and method name. */
