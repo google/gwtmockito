@@ -19,7 +19,9 @@ import javassist.CtMethod;
 
 import com.google.gwt.dev.util.collect.HashMap;
 import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.dom.client.SelectElement;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.ListBox;
 
 import org.mockito.Mockito;
 
@@ -46,6 +48,13 @@ public class StubGenerator {
       @Override
       public Object invoke() {
         return Mockito.mock(AnchorElement.class, new ReturnsCustomMocks());
+      }
+    });
+    // ListBox.ListBox must return a SelectElement rather than a plain Element
+    STUB_METHODS.put(new ClassAndMethod(ListBox.class, "getSelectElement"), new StubMethod() {
+      @Override
+      public Object invoke() {
+        return Mockito.mock(SelectElement.class, new ReturnsCustomMocks());
       }
     });
   }

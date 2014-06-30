@@ -64,6 +64,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwtmockito.fakes.FakeProvider;
@@ -603,6 +604,11 @@ public class GwtMockitoTest {
   @SuppressWarnings("unused")
   public void shouldBeAbleToCreateAnchors() {
     new Anchor();
+  }
+
+  @Test
+  public void shouldBeAbleToAddListBoxItems() {
+    new ListBox().addItem("item");
   }
 
   static class PackagePrivateClass {
