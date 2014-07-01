@@ -327,16 +327,20 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     }
 
     @Override
-    public Class<?> loadClass(String name) throws ClassNotFoundException {
+    protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
       // If the class is in a blacklisted package, load it with the default classloader.
       for (String blacklistedPackage : getPackagesToLoadViaStandardClassloader()) {
         if (name.startsWith(blacklistedPackage)) {
-          return GwtMockitoTestRunner.class.getClassLoader().loadClass(name);
+          Class<?> clazz = GwtMockitoTestRunner.class.getClassLoader().loadClass(name);
+          if (resolve) {
+            resolveClass(clazz);
+          }
+          return clazz;
         }
       }
 
       // Otherwise load it with our custom classloader.
-      return super.loadClass(name);
+      return super.loadClass(name, resolve);
     }
 
     @Override
