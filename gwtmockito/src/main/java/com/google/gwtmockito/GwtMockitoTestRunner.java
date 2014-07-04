@@ -26,6 +26,7 @@ import javassist.Translator;
 
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.CellPanel;
@@ -183,6 +184,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     classes.add(UIObject.class);
     classes.add(Widget.class);
 
+    classes.add(DataGrid.class);
     classes.add(Image.class);
 
     classes.add(AbsolutePanel.class);

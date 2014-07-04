@@ -607,6 +607,12 @@ public class GwtMockitoTest {
   }
 
   @Test
+  @SuppressWarnings("unused")
+  public void shouldBeAbleToCreateDataGrids() {
+    new DataGrid<String>();
+  }
+
+  @Test
   public void shouldBeAbleToAddListBoxItems() {
     new ListBox().addItem("item");
   }
