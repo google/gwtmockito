@@ -13,11 +13,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.google.gwtmockito.subpackage;
+package com.google.gwtmockito;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.google.gwtmockito.subpackage.LoadedFromStandardClassLoader;
 
 /**
- * A class that is loaded from the standard class loader.
+ * Test checking the behavior of the {@link @WithPackagesToLoadViaStandardClassLoader} annotation.
  */
-public class LoadedFromStandardClassLoader {
-  public native String nativeMethod();
+@RunWith(GwtMockitoTestRunner.class)
+@WithPackagesToLoadViaStandardClassLoader("com.google.gwtmockito.subpackage")
+public class WithPackagesToLoadViaStandardClassLoaderTest {
+
+  @Test(expected = LinkageError.class)
+  public void shouldNotReloadBlacklistedClasses() {
+    new LoadedFromStandardClassLoader().nativeMethod();
+  }
 }

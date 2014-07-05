@@ -224,9 +224,11 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
    * Returns a list of package names that should always be loaded via the standard system
    * classloader instead of through GwtMockito's custom classloader. Any subpackages of these
    * packages will also be loaded with the standard loader. If you're getting
-   * "loader constraint violation" errors, try defining a new runner class that overrides this
-   * method and adds the package the error is complaining about. If you do this, you will probably
-   * want to retain the packages that are blacklisted by default by doing something like this:
+   * "loader constraint violation" errors, try using
+   * {@link WithPackagesToLoadViaStandardClassLoader} or defining a new runner class that overrides
+   * this method and adds the package the error is complaining about. If you override this method,
+   * you will probably want to retain the packages that are blacklisted by default by doing
+   * something like this:
    *
    * <pre>
    * &#064;Override
@@ -246,6 +248,12 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     packages.add("net.sourceforge.cobertura"); // To support Cobertura code coverage tools
     packages.add("org.hamcrest"); // Since this package is referenced directly from org.junit
     packages.add("org.junit"); // Make sure the ParentRunner can recognize annotations like @Test
+
+    WithPackagesToLoadViaStandardClassLoader annotation = unitTestClass.getAnnotation(WithPackagesToLoadViaStandardClassLoader.class);
+    if (annotation != null) {
+      packages.addAll(Arrays.asList(annotation.value()));
+    }
+
     return packages;
   }
 
