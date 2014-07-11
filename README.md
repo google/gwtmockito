@@ -231,7 +231,7 @@ section:
 <dependency>
   <groupId>com.google.gwt.gwtmockito</groupId>
   <artifactId>gwtmockito</artifactId>
-  <version>1.1.3</version>
+  <version>1.1.4</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -246,6 +246,14 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
     [sample app][9].
 
 ## Version history
+
+### 1.1.4
+  * Many fixes for ClastCastExceptions when mocking various classes.
+  * Support for Cobertura coverage tools. (Thanks to mvmn)
+  * Try to intelligently return the right value for getTagName when possible.
+  * Fixed a classloader delegation issue. (Thanks to paulduffin)
+  * Add an annotation allowing the blacklist of classes that are always
+    loaded via the standard classloader to be specified on a per-test bases.
 
 ### 1.1.3
   * Support for Hamcrest matchers.
@@ -290,7 +298,7 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
 [2]: http://google.github.io/gwtmockito/javadoc/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class,%20com.google.gwtmockito.fakes.FakeProvider)
 [3]: https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay
 [4]: http://en.wikipedia.org/wiki/Dependency_injection
-[5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.3/gwtmockito-1.1.3.jar
+[5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.4/gwtmockito-1.1.4.jar
 [6]: https://code.google.com/p/mockito/downloads/list
 [7]: http://www.jboss.org/javassist/downloads
 [8]: http://google.github.io/gwtmockito/javadoc/
