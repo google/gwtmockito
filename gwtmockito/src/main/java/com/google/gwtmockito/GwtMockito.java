@@ -25,8 +25,10 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.user.client.impl.HistoryImpl;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwtmockito.fakes.FakeClientBundleProvider;
+import com.google.gwtmockito.fakes.FakeHistoryImplProvider;
 import com.google.gwtmockito.fakes.FakeLocaleInfoImplProvider;
 import com.google.gwtmockito.fakes.FakeMessagesProvider;
 import com.google.gwtmockito.fakes.FakeProvider;
@@ -96,6 +98,7 @@ public class GwtMockito {
   static {
     DEFAULT_FAKE_PROVIDERS.put(ClientBundle.class, new FakeClientBundleProvider());
     DEFAULT_FAKE_PROVIDERS.put(CssResource.class, new FakeMessagesProvider<CssResource>());
+    DEFAULT_FAKE_PROVIDERS.put(HistoryImpl.class, new FakeHistoryImplProvider());
     DEFAULT_FAKE_PROVIDERS.put(LocaleInfoImpl.class, new FakeLocaleInfoImplProvider());
     DEFAULT_FAKE_PROVIDERS.put(Messages.class, new FakeMessagesProvider<Messages>());
     DEFAULT_FAKE_PROVIDERS.put(

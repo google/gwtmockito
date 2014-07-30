@@ -617,6 +617,12 @@ public class GwtMockitoTest {
     new ListBox().addItem("item");
   }
 
+  @Test
+  public void shouldBeAbleToUseHistory() {
+    History.newItem("token");
+    assertEquals("token", History.getToken());
+  }
+
   static class PackagePrivateClass {
     String doStuff() {
       return "not mocked";
