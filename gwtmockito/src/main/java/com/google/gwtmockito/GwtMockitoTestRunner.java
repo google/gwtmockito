@@ -142,8 +142,13 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
 
       // Overwrite the private "fTestClass" field in ParentRunner (superclass of
       // BlockJUnit4ClassRunner). This refers to the test class being run, so replace it with our
-      // custom-loaded class.
-      Field testClassField = ParentRunner.class.getDeclaredField("fTestClass");
+      // custom-loaded class. As of JUnit 4.12, "fTestClass" was renamed to "testClass".
+      Field testClassField;
+      try {
+        testClassField = ParentRunner.class.getDeclaredField("fTestClass");
+      } catch (NoSuchFieldException e) {
+        testClassField = ParentRunner.class.getDeclaredField("testClass");
+      }
       testClassField.setAccessible(true);
       testClassField.set(this, new TestClass(customLoadedTestClass));
     } catch (Exception e) {
