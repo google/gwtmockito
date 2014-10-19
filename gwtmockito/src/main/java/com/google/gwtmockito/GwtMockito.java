@@ -20,6 +20,7 @@ import static org.mockito.Mockito.mock;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWTBridge;
 import com.google.gwt.i18n.client.Messages;
+import com.google.gwt.i18n.client.constants.NumberConstantsImpl;
 import com.google.gwt.i18n.client.impl.LocaleInfoImpl;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
@@ -31,6 +32,7 @@ import com.google.gwtmockito.fakes.FakeClientBundleProvider;
 import com.google.gwtmockito.fakes.FakeHistoryImplProvider;
 import com.google.gwtmockito.fakes.FakeLocaleInfoImplProvider;
 import com.google.gwtmockito.fakes.FakeMessagesProvider;
+import com.google.gwtmockito.fakes.FakeNumberConstantsImplProvider;
 import com.google.gwtmockito.fakes.FakeProvider;
 import com.google.gwtmockito.fakes.FakeUiBinderProvider;
 import com.google.gwtmockito.impl.ReturnsCustomMocks;
@@ -101,6 +103,7 @@ public class GwtMockito {
     DEFAULT_FAKE_PROVIDERS.put(HistoryImpl.class, new FakeHistoryImplProvider());
     DEFAULT_FAKE_PROVIDERS.put(LocaleInfoImpl.class, new FakeLocaleInfoImplProvider());
     DEFAULT_FAKE_PROVIDERS.put(Messages.class, new FakeMessagesProvider<Messages>());
+    DEFAULT_FAKE_PROVIDERS.put(NumberConstantsImpl.class, new FakeNumberConstantsImplProvider());
     DEFAULT_FAKE_PROVIDERS.put(
         SafeHtmlTemplates.class, new FakeMessagesProvider<SafeHtmlTemplates>());
     DEFAULT_FAKE_PROVIDERS.put(UiBinder.class, new FakeUiBinderProvider());

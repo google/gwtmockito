@@ -54,6 +54,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.DataGrid;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
@@ -621,6 +622,11 @@ public class GwtMockitoTest {
   public void shouldBeAbleToUseHistory() {
     History.newItem("token");
     assertEquals("token", History.getToken());
+  }
+
+  @Test
+  public void shouldBeAbleToUseSimplePager() {
+    new SimplePager().setDisplay(new DataGrid<String>());
   }
 
   static class PackagePrivateClass {
