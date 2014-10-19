@@ -19,9 +19,11 @@ import javassist.CtMethod;
 
 import com.google.gwt.dev.util.collect.HashMap;
 import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.SelectElement;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
 
 import org.mockito.Mockito;
 
@@ -44,19 +46,17 @@ public class StubGenerator {
       new HashMap<ClassAndMethod, StubMethod>();
   static {
     // Anchor.getElement must return an AnchorElement rather than a plain Element
-    STUB_METHODS.put(new ClassAndMethod(Anchor.class, "getAnchorElement"), new StubMethod() {
-      @Override
-      public Object invoke() {
-        return Mockito.mock(AnchorElement.class, new ReturnsCustomMocks());
-      }
-    });
-    // ListBox.ListBox must return a SelectElement rather than a plain Element
-    STUB_METHODS.put(new ClassAndMethod(ListBox.class, "getSelectElement"), new StubMethod() {
-      @Override
-      public Object invoke() {
-        return Mockito.mock(SelectElement.class, new ReturnsCustomMocks());
-      }
-    });
+    STUB_METHODS.put(
+        new ClassAndMethod(Anchor.class, "getAnchorElement"),
+        new ReturnMockStubMethod(AnchorElement.class));
+    // ListBox.getSelectElement must return a SelectElement rather than a plain Element
+    STUB_METHODS.put(
+        new ClassAndMethod(ListBox.class, "getSelectElement"),
+        new ReturnMockStubMethod(SelectElement.class));
+    // TextBox.getInputElement must return an InputElement rather than a plain Element
+    STUB_METHODS.put(
+        new ClassAndMethod(TextBox.class, "getInputElement"),
+        new ReturnMockStubMethod(InputElement.class));
   }
 
   /** Returns whether the behavior of the given method should be replaced. */
@@ -151,5 +151,19 @@ public class StubGenerator {
   /** Fake implementation of a method. */
   private interface StubMethod {
     Object invoke();
+  }
+
+  /** A fake method implementation that just returns a new stub for a given class. */
+  private static class ReturnMockStubMethod implements StubMethod {
+    final Class<?> clazz;
+
+    ReturnMockStubMethod(Class<?> clazz) {
+      this.clazz = clazz;
+    }
+
+    @Override
+    public Object invoke() {
+      return Mockito.mock(clazz, new ReturnsCustomMocks());
+    }
   }
 }

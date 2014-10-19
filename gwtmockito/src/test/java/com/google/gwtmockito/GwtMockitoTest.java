@@ -67,6 +67,7 @@ import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwtmockito.fakes.FakeProvider;
 
@@ -616,6 +617,11 @@ public class GwtMockitoTest {
   @Test
   public void shouldBeAbleToAddListBoxItems() {
     new ListBox().addItem("item");
+  }
+
+  @Test
+  public void shouldBeAbleToConfigureTextBoxes() {
+    new TextBox().setMaxLength(123);
   }
 
   @Test
