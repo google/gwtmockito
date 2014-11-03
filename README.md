@@ -15,7 +15,7 @@ to call GWT.create from JUnit tests, returning [Mockito][1] mocks.
 
 ## How do I use it?
 
-Getting started with GwtMockito using Junit 4 is easy. Just annotate your test
+Getting started with GwtMockito using Junit 4.5+ is easy. Just annotate your test
 with `@RunWith(GwtMockitoTestRunner.class)`, then any calls to `GWT.create`
 encountered will return Mockito mocks instead of throwing exceptions:
 
