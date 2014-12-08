@@ -1,12 +1,12 @@
 /*
  * Copyright 2013 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -56,6 +56,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwtmockito.impl.StubGenerator;
 
+import org.junit.runner.Description;
+import org.junit.runner.Result;
+import org.junit.runner.notification.Failure;
+import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.ParentRunner;
@@ -295,7 +299,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
    * the context classloader.
    */
   @Override
-  public void run(RunNotifier notifier) {
+  public void run(final RunNotifier notifier) {
     // When running the test, we want to be sure to use our custom classloader as the context
     // classloader. This is important because Mockito will create mocks using the context
     // classloader. Things that can go wrong if this isn't set include not being able to mock
@@ -303,8 +307,64 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     // classloader than the class being mocked.
     ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
     Thread.currentThread().setContextClassLoader(gwtMockitoClassLoader);
+    RunNotifier wrapperNotifier = new RunNotifier();
+    wrapperNotifier.addListener(new RunListener() {
+      @Override
+      public void testAssumptionFailure(Failure failure) {
+        notifier.fireTestAssumptionFailed(failure);
+      }
+      @Override
+      public void testFailure(Failure failure) throws Exception {
+        if (failure.getException() instanceof ClassCastException
+            && failure.getMessage().contains("EnhancerByMockitoWithCGLIB")) {
+          notifier.fireTestFailure(new Failure(
+              failure.getDescription(),
+              new FailedCastException(
+                  "The test failed with a ClassCastException. This often indicates that you are "
+                      + "using a library that invokes JavaScriptObject.cast() to convert an object "
+                      + "from one type to another in a way that can't be mimicked in pure Java. "
+                      + "There are a few ways to deal with this:\n"
+                      + "  1) Inject the class that calls cast() into the class being tested so "
+                      + "that you can replace it with a mock.\n"
+                      + "  2) Annotate you test class with @WithClassesToStub and pass in the "
+                      + "class that is causing problems.\n"
+                      + "  3) If the class is part of GWT and not a third-party library, try "
+                      + "reporting it on the issue tracker at "
+                      + "https://github.com/google/gwtmockito/issues and it might be possible to "
+                      + " insert a workaround.\n",
+                  failure.getException())));
+        } else {
+          notifier.fireTestFailure(failure);
+        }
+      }
+
+      @Override
+      public void testFinished(Description description) throws Exception {
+        notifier.fireTestFinished(description);
+      }
+
+      @Override
+      public void testIgnored(Description description) throws Exception {
+        notifier.fireTestIgnored(description);
+      }
+
+      @Override
+      public void testRunFinished(Result result) throws Exception {
+        notifier.fireTestRunFinished(result);
+      }
+
+      @Override
+      public void testRunStarted(Description description) throws Exception {
+        notifier.fireTestRunStarted(description);
+      }
+
+      @Override
+      public void testStarted(Description description) throws Exception {
+        notifier.fireTestStarted(description);
+      }
+    });
     try {
-      super.run(notifier);
+      super.run(wrapperNotifier);
     } finally {
       Thread.currentThread().setContextClassLoader(originalClassLoader);
     }
@@ -444,5 +504,11 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
 
     @Override
     public void start(ClassPool pool) {}
+  }
+
+  private static class FailedCastException extends Exception {
+    FailedCastException(String message, Throwable cause) {
+      super(message, cause);
+    }
   }
 }
