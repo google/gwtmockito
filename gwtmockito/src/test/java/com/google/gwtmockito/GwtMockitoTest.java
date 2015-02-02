@@ -59,6 +59,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
@@ -66,6 +67,7 @@ import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -581,6 +583,13 @@ public class GwtMockitoTest {
       @Override
       public void render(Context context, String value, SafeHtmlBuilder sb) {}
     }));
+  }
+
+  @Test
+  @SuppressWarnings("unused")
+  public void shouldBeAbleToInstantiateRadioAndCheckBoxes() {
+    new RadioButton("foo");
+    new CheckBox();
   }
 
   @Test

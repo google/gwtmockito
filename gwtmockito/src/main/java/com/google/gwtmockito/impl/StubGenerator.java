@@ -57,6 +57,10 @@ public class StubGenerator {
     STUB_METHODS.put(
         new ClassAndMethod(TextBox.class, "getInputElement"),
         new ReturnMockStubMethod(InputElement.class));
+    // InputElement needs to be able to convert generic elements into input elements
+    STUB_METHODS.put(
+        new ClassAndMethod(InputElement.class, "as"),
+        new ReturnMockStubMethod(InputElement.class));
   }
 
   /** Returns whether the behavior of the given method should be replaced. */
