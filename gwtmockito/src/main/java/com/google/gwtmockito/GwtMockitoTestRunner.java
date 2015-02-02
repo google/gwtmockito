@@ -326,7 +326,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
                       + "There are a few ways to deal with this:\n"
                       + "  1) Inject the class that calls cast() into the class being tested so "
                       + "that you can replace it with a mock.\n"
-                      + "  2) Annotate you test class with @WithClassesToStub and pass in the "
+                      + "  2) Annotate your test class with @WithClassesToStub and pass in the "
                       + "class that is causing problems.\n"
                       + "  3) If the class is part of GWT and not a third-party library, try "
                       + "reporting it on the issue tracker at "
