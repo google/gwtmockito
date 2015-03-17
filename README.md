@@ -231,7 +231,7 @@ section:
 <dependency>
   <groupId>com.google.gwt.gwtmockito</groupId>
   <artifactId>gwtmockito</artifactId>
-  <version>1.1.4</version>
+  <version>1.1.5</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -247,8 +247,17 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
 
 ## Version history
 
+### 1.1.5
+  * Support for JUnit 4.12. (Thanks to selesse)
+  * Provide a better error message for `ClassCastException`s that we can't work around.
+  * Support for JaCoCo. (Thanks to rsauciuc)
+  * Include a fake implementation of `NumberConstants`.
+  * Fixed support for `History` methods.
+  * Fix for some `TextBox` methods.
+  * Fix instantiation of checkboxes and radio buttons.
+
 ### 1.1.4
-  * Many fixes for ClastCastExceptions when mocking various classes.
+  * Many fixes for `ClassCastException`s when mocking various classes.
   * Support for Cobertura coverage tools. (Thanks to mvmn)
   * Try to intelligently return the right value for getTagName when possible.
   * Fixed a classloader delegation issue. (Thanks to paulduffin)
@@ -298,7 +307,7 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
 [2]: http://google.github.io/gwtmockito/javadoc/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class,%20com.google.gwtmockito.fakes.FakeProvider)
 [3]: https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay
 [4]: http://en.wikipedia.org/wiki/Dependency_injection
-[5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.4/gwtmockito-1.1.4.jar
+[5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.5/gwtmockito-1.1.5.jar
 [6]: https://code.google.com/p/mockito/downloads/list
 [7]: http://www.jboss.org/javassist/downloads
 [8]: http://google.github.io/gwtmockito/javadoc/
