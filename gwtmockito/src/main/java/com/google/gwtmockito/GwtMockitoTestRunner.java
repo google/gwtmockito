@@ -21,6 +21,7 @@ import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtMethod;
 import javassist.Loader;
+import javassist.LoaderClassPath;
 import javassist.NotFoundException;
 import javassist.Translator;
 
@@ -121,7 +122,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     // Build a fresh class pool with the system path and any user-specified paths and use it to
     // create the custom classloader
     ClassPool classPool = new ClassPool();
-    classPool.appendSystemPath();
+    classPool.appendClassPath(new LoaderClassPath(getParentClassloader()));
     for (String path : getAdditionalClasspaths()) {
       try {
         classPool.appendClassPath(path);
