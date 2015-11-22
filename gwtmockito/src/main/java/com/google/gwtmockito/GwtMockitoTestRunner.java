@@ -270,13 +270,13 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
 
   /**
    * Returns the classloader to use as the parent of GwtMockito's classloader. By default this is
-   * the system classloader. This can be customized by defining a custom test runner extending
-   * {@link GwtMockitoTestRunner} and overriding this method.
+   * the current thread's context classloader. This can be customized by defining a custom test
+   * runner extending {@link GwtMockitoTestRunner} and overriding this method.
    *
    * @return classloader to use for delegation when loading classes via GwtMockito
    */
   protected ClassLoader getParentClassloader() {
-    return ClassLoader.getSystemClassLoader();
+    return Thread.currentThread().getContextClassLoader();
   }
 
   /**
