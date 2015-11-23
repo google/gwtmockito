@@ -61,6 +61,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineHTML;
@@ -71,6 +72,7 @@ import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.DatePicker;
 import com.google.gwtmockito.fakes.FakeProvider;
 
 import org.hamcrest.BaseMatcher;
@@ -565,9 +567,20 @@ public class GwtMockitoTest {
   }
 
   @Test
+  public void shouldBeAbleToInstantiateDatePicker() {
+    assertNotNull(new DatePicker());
+  }
+
+  @Test
   public void shouldBeAbleToSetHtml() {
     new HTML().setHTML("html");
     new HTML().setHTML(SafeHtmlUtils.fromSafeConstant("html"));
+  }
+
+  @Test
+  public void shouldBeAbleToSetTextInGrids() {
+    Grid grid = new Grid();
+    grid.setText(0, 0, "foo");
   }
 
   @Test

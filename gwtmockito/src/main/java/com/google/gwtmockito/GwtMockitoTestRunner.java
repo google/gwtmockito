@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -195,6 +196,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     classes.add(Widget.class);
 
     classes.add(DataGrid.class);
+    classes.add(HTMLTable.class);
     classes.add(Image.class);
 
     classes.add(AbsolutePanel.class);
