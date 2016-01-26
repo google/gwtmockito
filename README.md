@@ -231,7 +231,7 @@ section:
 <dependency>
   <groupId>com.google.gwt.gwtmockito</groupId>
   <artifactId>gwtmockito</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -246,6 +246,12 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
     [sample app][9].
 
 ## Version history
+
+### 1.1.6
+  * Improved support for running tests in IntelliJ.
+  * Fix for stubbing DatePicker.
+  * Better support for non-default classloaders. (Thanks to leanseefeld)
+  * Depend on mockito-core instead of mockito-all. (Thanks to psiroky)
 
 ### 1.1.5
   * Support for JUnit 4.12. (Thanks to selesse)
@@ -307,7 +313,7 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
 [2]: http://google.github.io/gwtmockito/javadoc/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class,%20com.google.gwtmockito.fakes.FakeProvider)
 [3]: https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay
 [4]: http://en.wikipedia.org/wiki/Dependency_injection
-[5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.5/gwtmockito-1.1.5.jar
+[5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.6/gwtmockito-1.1.6.jar
 [6]: https://code.google.com/p/mockito/downloads/list
 [7]: http://www.jboss.org/javassist/downloads
 [8]: http://google.github.io/gwtmockito/javadoc/
