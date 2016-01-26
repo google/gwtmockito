@@ -310,7 +310,7 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
   * Initial release
 
 [1]: https://code.google.com/p/mockito/
-[2]: http://static.javadoc.io/com.google.gwt.gwtmockito/gwtmockito/1.1.6/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class, com.google.gwtmockito.fakes.FakeProvider)
+[2]: http://static.javadoc.io/com.google.gwt.gwtmockito/gwtmockito/1.1.6/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class,%20com.google.gwtmockito.fakes.FakeProvider)
 [3]: https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay
 [4]: http://en.wikipedia.org/wiki/Dependency_injection
 [5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.6/gwtmockito-1.1.6.jar
