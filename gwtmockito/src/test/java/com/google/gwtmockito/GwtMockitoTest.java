@@ -71,6 +71,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import com.google.gwtmockito.fakes.FakeProvider;
@@ -655,6 +656,12 @@ public class GwtMockitoTest {
   @Test
   public void shouldBeAbleToUseSimplePager() {
     new SimplePager().setDisplay(new DataGrid<String>());
+  }
+
+  @Test
+  @SuppressWarnings("unused")
+  public void shouldBeAbleToCreateValueListBox() {
+    new ValueListBox<Object>();
   }
 
   static class PackagePrivateClass {
