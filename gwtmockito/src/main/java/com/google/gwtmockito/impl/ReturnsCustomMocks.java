@@ -17,6 +17,7 @@ package com.google.gwtmockito.impl;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.InputElement;
 
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMocks;
 import org.mockito.invocation.InvocationOnMock;
@@ -42,6 +43,8 @@ public class ReturnsCustomMocks extends ReturnsMocks {
     } else if (invocation.getMock() instanceof Element && methodName.equals("getTagName")) {
       String className = invocation.getMock().getClass().getSimpleName();
       return className.substring(0, className.indexOf("Element")).toLowerCase();
+		} else if (invocation.getMock() instanceof InputElement && methodName.equals("getType")) {
+			return "text";
     } else {
       return super.answer(invocation);
     }
