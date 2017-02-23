@@ -21,6 +21,7 @@ import com.google.gwt.dev.util.collect.HashMap;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.SelectElement;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
