@@ -43,8 +43,8 @@ public class ReturnsCustomMocks extends ReturnsMocks {
     } else if (invocation.getMock() instanceof Element && methodName.equals("getTagName")) {
       String className = invocation.getMock().getClass().getSimpleName();
       return className.substring(0, className.indexOf("Element")).toLowerCase();
-		} else if (invocation.getMock() instanceof InputElement && methodName.equals("getType")) {
-			return "text";
+	} else if (invocation.getMock() instanceof InputElement && methodName.equals("getType")) {
+		return "text";
     } else {
       return super.answer(invocation);
     }
