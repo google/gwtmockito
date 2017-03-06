@@ -62,14 +62,14 @@ public class StubGenerator {
     STUB_METHODS.put(
         new ClassAndMethod(InputElement.class, "as"),
         new ReturnMockStubMethod(InputElement.class));
-	// URL.encodeQueryStringImpl
-	STUB_METHODS.put(
-		new ClassAndMethod(URL.class, "encodeQueryStringImpl"),
-		new ReturnStringStubMethod("encodeQueryStringImpl"));
-	// URL.encodePathSegmentImpl
-	STUB_METHODS.put(
-		new ClassAndMethod(URL.class, "encodePathSegmentImpl"),
-		new ReturnStringStubMethod("encodePathSegmentImpl"));
+    // URL.encodeQueryStringImpl
+    STUB_METHODS.put(
+      new ClassAndMethod(URL.class, "encodeQueryStringImpl"),
+      new ReturnStringStubMethod("encodeQueryStringImpl"));
+    // URL.encodePathSegmentImpl
+    STUB_METHODS.put(
+      new ClassAndMethod(URL.class, "encodePathSegmentImpl"),
+      new ReturnStringStubMethod("encodePathSegmentImpl"));
   }
 
   /** Returns whether the behavior of the given method should be replaced. */
@@ -183,10 +183,10 @@ public class StubGenerator {
   /** A fake method implementation that just returns a string. */
   private static class ReturnStringStubMethod implements StubMethod {
 
-	private String str;
+    private String str;
 
-	ReturnStringStubMethod(String str) {
-		this.str = str;
+    ReturnStringStubMethod(String str) {
+      this.str = str;
     }
 
     @Override

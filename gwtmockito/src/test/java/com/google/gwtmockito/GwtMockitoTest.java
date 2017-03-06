@@ -32,7 +32,9 @@ import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.IFrameElement;
+import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.Node;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.BidiPolicy;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.Messages;
@@ -591,6 +593,17 @@ public class GwtMockitoTest {
     assertEquals("iframe", Document.get().createIFrameElement().getTagName());
   }
 
+  @Test
+  public void shouldReturnTextAsType() {
+    assertEquals("text", InputElement.as(Document.get().createTextInputElement()).getType());
+  }
+
+  @Test
+  public void shouldReturnDummyStringsFromURL() {
+    assertEquals("encodeQueryStringImpl", URL.encodeQueryString(""));
+    assertEquals("encodePathSegmentImpl", URL.encodePathSegment(""));
+  }
+  
   @Test
   public void shouldBeAbleToInstantiateCellLists() {
     assertNotNull(new CellList<String>(new AbstractCell<String>() {
