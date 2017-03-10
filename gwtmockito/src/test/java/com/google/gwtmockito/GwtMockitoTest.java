@@ -32,7 +32,9 @@ import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.IFrameElement;
+import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.Node;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.BidiPolicy;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.Messages;
@@ -71,6 +73,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import com.google.gwtmockito.fakes.FakeProvider;
@@ -591,6 +594,17 @@ public class GwtMockitoTest {
   }
 
   @Test
+  public void shouldReturnTextAsType() {
+    assertEquals("text", InputElement.as(Document.get().createTextInputElement()).getType());
+  }
+
+  @Test
+  public void shouldReturnDummyStringsFromURL() {
+    assertEquals("encodeQueryStringImpl", URL.encodeQueryString(""));
+    assertEquals("encodePathSegmentImpl", URL.encodePathSegment(""));
+  }
+  
+  @Test
   public void shouldBeAbleToInstantiateCellLists() {
     assertNotNull(new CellList<String>(new AbstractCell<String>() {
       @Override
@@ -655,6 +669,12 @@ public class GwtMockitoTest {
   @Test
   public void shouldBeAbleToUseSimplePager() {
     new SimplePager().setDisplay(new DataGrid<String>());
+  }
+
+  @Test
+  @SuppressWarnings("unused")
+  public void shouldBeAbleToCreateValueListBox() {
+    new ValueListBox<Object>();
   }
 
   static class PackagePrivateClass {

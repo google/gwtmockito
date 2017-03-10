@@ -21,6 +21,7 @@ import com.google.gwt.dev.util.collect.HashMap;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.SelectElement;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -61,6 +62,14 @@ public class StubGenerator {
     STUB_METHODS.put(
         new ClassAndMethod(InputElement.class, "as"),
         new ReturnMockStubMethod(InputElement.class));
+    // URL.encodeQueryStringImpl
+    STUB_METHODS.put(
+      new ClassAndMethod(URL.class, "encodeQueryStringImpl"),
+      new ReturnStringStubMethod("encodeQueryStringImpl"));
+    // URL.encodePathSegmentImpl
+    STUB_METHODS.put(
+      new ClassAndMethod(URL.class, "encodePathSegmentImpl"),
+      new ReturnStringStubMethod("encodePathSegmentImpl"));
   }
 
   /** Returns whether the behavior of the given method should be replaced. */
@@ -168,6 +177,21 @@ public class StubGenerator {
     @Override
     public Object invoke() {
       return Mockito.mock(clazz, new ReturnsCustomMocks());
+    }
+  }
+
+  /** A fake method implementation that just returns a string. */
+  private static class ReturnStringStubMethod implements StubMethod {
+
+    private String str;
+
+    ReturnStringStubMethod(String str) {
+      this.str = str;
+    }
+
+    @Override
+    public Object invoke() {
+      return str;
     }
   }
 }

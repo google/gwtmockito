@@ -54,6 +54,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwtmockito.impl.StubGenerator;
@@ -223,6 +224,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     classes.add(SplitLayoutPanel.class);
     classes.add(StackPanel.class);
     classes.add(VerticalPanel.class);
+    classes.add(ValueListBox.class);
 
     WithClassesToStub annotation = unitTestClass.getAnnotation(WithClassesToStub.class);
     if (annotation != null) {
