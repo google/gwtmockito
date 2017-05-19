@@ -28,7 +28,6 @@ import static org.mockito.Mockito.when;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.dev.util.collect.HashSet;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -78,7 +77,6 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import com.google.gwtmockito.fakes.FakeProvider;
-import com.mls.web.client.core.ui.components.video.VideoCss;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.CoreMatchers;
@@ -91,7 +89,6 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 
 import java.util.Date;
-import java.util.Set;
 
 /**
  * Tests for {@link GwtMockito} when running with {@link GwtMockitoTestRunner}.
@@ -162,21 +159,6 @@ public class GwtMockitoTest {
     assertEquals("safeHtmlWithUri(argX, http://uriY)",
         messages.safeHtmlWithUri(SafeHtmlUtils.fromTrustedString("argX"),
             UriUtils.fromSafeConstant("http://uriY")).asString());
-  }
-
-  @Test
-  public void shouldGenerateHashCodeForMessages() {
-    SampleMessages messages = GWT.create(SampleMessages.class);
-    SampleMessages2 messages2 = GWT.create(SampleMessages2.class);
-
-    final Set<Messages> set = new HashSet<>();
-
-    set.add(messages);
-    set.add(messages2);
-    assertEquals(2, set.size());
-
-    set.add(messages);
-    assertEquals(2, set.size());
   }
 
   @Test
@@ -728,10 +710,6 @@ public class GwtMockitoTest {
     String twoArgs(String arg1, String arg2);
     SafeHtml safeHtml(SafeHtml arg);
     SafeHtml safeHtmlWithUri(SafeHtml arg1, SafeUri arg2);
-  }
-
-  interface SampleMessages2 extends SampleMessages {
-
   }
 
   interface SampleCss extends CssResource {
