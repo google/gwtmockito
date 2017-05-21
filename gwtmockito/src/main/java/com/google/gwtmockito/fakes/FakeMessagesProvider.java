@@ -51,6 +51,10 @@ public class FakeMessagesProvider<T> implements FakeProvider<T> {
           public Object invoke(Object proxy, Method method, Object[] args) throws Exception {
             if (method.getName().equals("ensureInjected")) {
               return true;
+            } else if (method.getName().equals("hashCode")) {
+              return proxy.hashCode();
+            } else if (method.getName().equals("equals")) {
+              return proxy.getClass().equals(args[0].getClass());
             } else if (method.getReturnType() == String.class) {
               return buildMessage(method, args);
             } else if (method.getReturnType() == SafeHtml.class) {
