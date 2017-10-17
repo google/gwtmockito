@@ -78,13 +78,13 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import com.google.gwtmockito.fakes.FakeProvider;
-import com.mls.web.client.core.ui.components.video.VideoCss;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
@@ -164,6 +164,7 @@ public class GwtMockitoTest {
             UriUtils.fromSafeConstant("http://uriY")).asString());
   }
 
+  @Ignore("https://github.com/google/gwtmockito/issues/70")
   @Test
   public void shouldGenerateHashCodeForMessages() {
     SampleMessages messages = GWT.create(SampleMessages.class);
