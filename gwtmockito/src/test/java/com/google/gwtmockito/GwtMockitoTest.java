@@ -78,7 +78,6 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import com.google.gwtmockito.fakes.FakeProvider;
-import com.mls.web.client.core.ui.components.video.VideoCss;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.CoreMatchers;

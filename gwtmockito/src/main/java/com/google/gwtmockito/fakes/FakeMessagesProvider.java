@@ -52,7 +52,7 @@ public class FakeMessagesProvider<T> implements FakeProvider<T> {
             if (method.getName().equals("ensureInjected")) {
               return true;
             } else if (method.getName().equals("hashCode")) {
-              return proxy.hashCode();
+              return proxy.getClass().hashCode();
             } else if (method.getName().equals("equals")) {
               return proxy.getClass().equals(args[0].getClass());
             } else if (method.getReturnType() == String.class) {
