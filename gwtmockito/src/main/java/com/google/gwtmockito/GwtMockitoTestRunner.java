@@ -259,6 +259,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
   protected Collection<String> getPackagesToLoadViaStandardClassloader() {
     Collection<String> packages = new LinkedList<String>();
     packages.add("com.vladium"); // To support EMMA code coverage tools
+    packages.add("jdk.internal.reflect"); // Java9 loading mechanism
     packages.add("net.sourceforge.cobertura"); // To support Cobertura code coverage tools
     packages.add("org.jacoco"); // To support JaCoCo code coverage tools
     packages.add("org.hamcrest"); // Since this package is referenced directly from org.junit
