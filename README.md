@@ -231,7 +231,7 @@ section:
 <dependency>
   <groupId>com.google.gwt.gwtmockito</groupId>
   <artifactId>gwtmockito</artifactId>
-  <version>1.1.6</version>
+  <version>1.1.7</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -246,6 +246,13 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
     [sample app][9].
 
 ## Version history
+
+### 1.1.7
+  * Update GWT to version 2.8.0.
+  * Update Javassist to version 3.22.
+  * Stubbing for ValueListBox. (Thanks to jschmied)
+  * Stubbing for URL encoding. (Thanks to jschmeid)
+  * Generate hashCode and equals for Messages. (Thanks to zolv)
 
 ### 1.1.6
   * Improved support for running tests in IntelliJ.
@@ -310,12 +317,12 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
   * Initial release
 
 [1]: https://code.google.com/p/mockito/
-[2]: http://static.javadoc.io/com.google.gwt.gwtmockito/gwtmockito/1.1.6/com/google/gwtmockito/GwtMockito.html#useProviderForType(java.lang.Class,%20com.google.gwtmockito.fakes.FakeProvider)
+[2]: http://static.javadoc.io/com.google.gwt.gwtmockito/gwtmockito/1.1.7/com/google/gwtmockito/GwtMockito.html#useProviderForType-java.lang.Class-com.google.gwtmockito.fakes.FakeProvider-
 [3]: https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay
 [4]: http://en.wikipedia.org/wiki/Dependency_injection
-[5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.6/gwtmockito-1.1.6.jar
+[5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.7/gwtmockito-1.1.7.jar
 [6]: https://code.google.com/p/mockito/downloads/list
 [7]: http://www.jboss.org/javassist/downloads
-[8]: http://www.javadoc.io/doc/com.google.gwt.gwtmockito/gwtmockito/1.1.6
+[8]: http://www.javadoc.io/doc/com.google.gwt.gwtmockito/gwtmockito/1.1.7
 [9]: https://github.com/google/gwtmockito/tree/master/gwtmockito-sample/src
 [10]: https://github.com/google/gwtmockito/commit/52b5ddfc08df1b630cd1f241d2afaa08fed82a77
