@@ -231,7 +231,7 @@ section:
 <dependency>
   <groupId>com.google.gwt.gwtmockito</groupId>
   <artifactId>gwtmockito</artifactId>
-  <version>1.1.7</version>
+  <version>1.1.8</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -246,6 +246,9 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
     [sample app][9].
 
 ## Version history
+
+### 1.1.8
+  * Preliminary Java 9 support (Thanks to benoitf)
 
 ### 1.1.7
   * Update GWT to version 2.8.0.
@@ -317,12 +320,12 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
   * Initial release
 
 [1]: https://code.google.com/p/mockito/
-[2]: http://static.javadoc.io/com.google.gwt.gwtmockito/gwtmockito/1.1.7/com/google/gwtmockito/GwtMockito.html#useProviderForType-java.lang.Class-com.google.gwtmockito.fakes.FakeProvider-
+[2]: https://static.javadoc.io/com.google.gwt.gwtmockito/gwtmockito/1.1.8/com/google/gwtmockito/GwtMockito.html#useProviderForType-java.lang.Class-com.google.gwtmockito.fakes.FakeProvider-
 [3]: https://developers.google.com/web-toolkit/doc/latest/DevGuideCodingBasicsOverlay
-[4]: http://en.wikipedia.org/wiki/Dependency_injection
-[5]: http://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.7/gwtmockito-1.1.7.jar
+[4]: https://en.wikipedia.org/wiki/Dependency_injection
+[5]: https://search.maven.org/remotecontent?filepath=com/google/gwt/gwtmockito/gwtmockito/1.1.8/gwtmockito-1.1.8.jar
 [6]: https://code.google.com/p/mockito/downloads/list
 [7]: http://www.jboss.org/javassist/downloads
-[8]: http://www.javadoc.io/doc/com.google.gwt.gwtmockito/gwtmockito/1.1.7
+[8]: https://www.javadoc.io/doc/com.google.gwt.gwtmockito/gwtmockito/1.1.8
 [9]: https://github.com/google/gwtmockito/tree/master/gwtmockito-sample/src
 [10]: https://github.com/google/gwtmockito/commit/52b5ddfc08df1b630cd1f241d2afaa08fed82a77
