@@ -41,7 +41,7 @@
          https://github.com/google/gwtmockito/issues/14. -->
     <dependency>
       <groupId>org.powermock</groupId>
-      <artifactId>powermock-api-mockito</artifactId>
+      <artifactId>powermock-api-mockito2</artifactId>
     </dependency>
 
   </dependencies>

@@ -24,6 +24,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -357,7 +358,7 @@ public class GwtMockitoTest {
   @Test
   public void shouldAllowArgumentMatchers() throws Exception {
     element.setClassName("classname");
-    verify(element).setClassName(Matchers.argThat(new BaseMatcher<String>() {
+    verify(element).setClassName(argThat(new BaseMatcher<String>() {
       @Override
       public boolean matches(Object item) {
         return item.toString().equals("classname");
