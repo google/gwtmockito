@@ -18,6 +18,7 @@ package com.google.gwtmockito;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -70,6 +71,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.InlineLabel;
+import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
@@ -690,6 +692,13 @@ public class GwtMockitoTest {
   }
 
   @Test
+  public void testIntegerBox() {
+    SampleWidget widget = new SampleWidget();
+
+    when(widget.intbox.getValue()).thenReturn(null);
+  }
+
+  @Test
   @SuppressWarnings("unused")
   public void shouldBeAbleToCreateValueListBox() {
     new ValueListBox<Object>();
@@ -757,6 +766,7 @@ public class GwtMockitoTest {
 
     @UiField Label label;
     @UiField SampleCss css;
+    @UiField IntegerBox intbox;
 
     SampleWidget() {
       MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
