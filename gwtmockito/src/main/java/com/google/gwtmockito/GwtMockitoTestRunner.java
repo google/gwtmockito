@@ -71,13 +71,14 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.junit.runners.model.TestClass;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.google.gwtmockito.impl.ThreadLocalCleaner.cleanUpThreadLocalValues;
 
 /**
  * A JUnit4 test runner that executes a test using GwtMockito. In addition to
@@ -374,50 +375,10 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
       super.run(wrapperNotifier);
     } finally {
       Thread.currentThread().setContextClassLoader(originalClassLoader);
-      cleanUpThreadLocaValues();
-    }
-  }
-
-  /**
-   * Remove ThreadLocalMap entries of objects loaded through the gwtMockitoClassLoader as they prevent garbage collection of
-   * the gwtMockitoClassLoader while the thread that executed the test is alive
-   */
-  private void cleanUpThreadLocaValues() {
-    try {
-      Object threadLocalMap = getPrivateAttribute(Thread.class, "threadLocals", Thread.currentThread());
-      WeakReference[] table = (WeakReference[]) getPrivateAttribute("table", threadLocalMap);
-      int length = table.length;
-      for (int i = 0; i < length; i++) {
-        WeakReference mapEntry = table[i];
-        if (mapEntry != null && mapEntry.get() != null) {
-          ClassLoader mapEntryKeyClassLoader = mapEntry.get().getClass().getClassLoader();
-          Field mapEntryValueField = getPrivateAttributeAccessibleField(mapEntry.getClass(), "value");
-          ClassLoader mapEntryValueClassLoader = mapEntryValueField.get(mapEntry).getClass().getClassLoader();
-          if (mapEntryKeyClassLoader == gwtMockitoClassLoader || mapEntryValueClassLoader == gwtMockitoClassLoader) {
-            mapEntry.clear();
-            mapEntryValueField.set(mapEntry, null);
-            // The ThreadLocalMap is able to expunge the remaining stale entries, no need to remove it from the map
-          }
-        }
+      if (unitTestClass.getAnnotation(WithExperimentalGarbageCollection.class) != null) {
+        cleanUpThreadLocalValues(gwtMockitoClassLoader);
       }
-    } catch (IllegalAccessException | NoSuchFieldException e) {
-      throw new AssertionError("Unable to access expected class fields", e);
     }
-  }
-
-  private Object getPrivateAttribute(String attributeName, Object holder) throws NoSuchFieldException, IllegalAccessException {
-    return getPrivateAttribute(holder.getClass(), attributeName, holder);
-  }
-
-  private Object getPrivateAttribute(Class attributeClass, String attributeName, Object holder) throws NoSuchFieldException, IllegalAccessException {
-    Field field = getPrivateAttributeAccessibleField(attributeClass, attributeName);
-    return field.get(holder);
-  }
-
-  private Field getPrivateAttributeAccessibleField(Class attributeClass, String attributeName) throws NoSuchFieldException {
-    Field field = attributeClass.getDeclaredField(attributeName);
-    field.setAccessible(true);
-    return field;
   }
 
   /**

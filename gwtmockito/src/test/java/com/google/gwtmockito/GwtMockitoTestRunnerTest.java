@@ -81,35 +81,11 @@ public class GwtMockitoTestRunnerTest {
         getClass().getClassLoader(), loadedClass.getClassLoader());
   }
 
-  @Test
-  public void shouldGarbageCollectGwtClassLoaderWhenThreadLocalIsUsed() throws InitializationError {
-    GwtMockitoTestRunner runner = new GwtMockitoTestRunner(TestWithThreadLocal.class);
-    runner.run(new RunNotifier());
-    WeakReference<GwtMockitoTestRunner> wkRunner = new WeakReference<>(runner);
-    // remove the reference to the runner to allow the garbage collector to collect it.
-    runner = null;
-    // Call the Garbage Collector to (try to) force the collection of the runner.
-    // This test is not perfect and may depend of the JVM Garbage Collector implementation as
-    // as return from "System.gc()" simply garantee that a "best effort to reclaim space from all discarded objects"
-    // has been done.
-    System.gc();
-    // Check if the garbage colllector has collected the runner instance through the WeakReference
-    assertNull("Expected to garbage collect the GwtMockitoTestRunner", wkRunner.get());
-  }
-
   @RunWith(JUnit4.class)
   public static class DummyTestClass {
 
     @Test
     public void dummy() {
-    }
-  }
-
-  @RunWith(JUnit4.class)
-  public static class TestWithThreadLocal {
-    @Test
-    public void dummy() {
-      ThreadLocalUsage threadLocalUsage = new ThreadLocalUsage();
     }
   }
 

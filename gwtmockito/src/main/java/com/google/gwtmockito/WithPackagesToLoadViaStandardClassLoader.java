@@ -21,7 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation allowing the the test to configure a list of package names that should always be
+ * Annotation allowing the test to configure a list of package names that should always be
  * loaded via the standard system classloader instead of through GwtMockito's custom classloader.
  * Any subpackages of these packages will also be loaded with the standard loader. If you're
  * getting "loader constraint violation" errors, try defining adding this annotation to your test
