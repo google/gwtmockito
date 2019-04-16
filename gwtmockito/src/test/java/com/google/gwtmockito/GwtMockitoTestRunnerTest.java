@@ -16,20 +16,14 @@
 package com.google.gwtmockito;
 
 import com.google.gwtmockito.subpackage.LoadedFromStandardClassLoader;
-
-import java.lang.ref.WeakReference;
 import java.util.Collection;
-
-import com.google.gwtmockito.subpackage.ThreadLocalUsage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.JUnit4;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.TestClass;
 
-import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -88,5 +82,4 @@ public class GwtMockitoTestRunnerTest {
     public void dummy() {
     }
   }
-
 }
