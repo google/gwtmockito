@@ -261,10 +261,12 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     packages.add("com.vladium"); // To support EMMA code coverage tools
     packages.add("jdk.internal.reflect"); // Java9 loading mechanism
     packages.add("net.bytebuddy"); // To support Mockito 2
+    packages.add("net.sf.cglib"); // To support Mockito 1
     packages.add("net.sourceforge.cobertura"); // To support Cobertura code coverage tools
     packages.add("org.jacoco"); // To support JaCoCo code coverage tools
     packages.add("org.hamcrest"); // Since this package is referenced directly from org.junit
     packages.add("org.junit"); // Make sure the ParentRunner can recognize annotations like @Test
+    packages.add("org.mockito.cglib"); // To support Mockito 1
 
     WithPackagesToLoadViaStandardClassLoader annotation = unitTestClass.getAnnotation(WithPackagesToLoadViaStandardClassLoader.class);
     if (annotation != null) {
@@ -402,6 +404,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
       super(classLoader == null ? GwtMockitoTestRunner.class.getClassLoader() : classLoader, classPool);
       try {
         addTranslator(classPool, this);
+        setDomain(getClass().getProtectionDomain());
       } catch (NotFoundException e) {
         throw new AssertionError("Impossible since this.start does not throw");
       } catch (CannotCompileException e) {
