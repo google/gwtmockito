@@ -13,8 +13,6 @@ import static junit.framework.TestCase.assertNull;
 
 public class GwtMockitoMemoryLeakTest {
 
-
-
     @Test
     public void shouldGarbageCollectGwtClassLoaderWhenThreadLocalIsUsed() throws InitializationError {
         GwtMockitoTestRunner runner = new GwtMockitoTestRunner(TestWithThreadLocal.class);

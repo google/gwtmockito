@@ -15,6 +15,7 @@
  */
 package com.google.gwtmockito;
 
+import com.google.gwtmockito.impl.ThreadLocalCleaner;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -77,8 +78,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.google.gwtmockito.impl.ThreadLocalCleaner.cleanUpThreadLocalValues;
 
 /**
  * A JUnit4 test runner that executes a test using GwtMockito. In addition to
@@ -375,8 +374,8 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
       super.run(wrapperNotifier);
     } finally {
       Thread.currentThread().setContextClassLoader(originalClassLoader);
-      if (unitTestClass.getAnnotation(WithExperimentalGarbageCollection.class) != null) {
-        cleanUpThreadLocalValues(gwtMockitoClassLoader);
+      if (unitTestClass.isAnnotationPresent(WithExperimentalGarbageCollection.class)) {
+        ThreadLocalCleaner.cleanUpThreadLocalValues(gwtMockitoClassLoader);
       }
     }
   }
