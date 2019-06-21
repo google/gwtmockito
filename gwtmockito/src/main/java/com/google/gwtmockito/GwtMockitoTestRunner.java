@@ -15,7 +15,6 @@
  */
 package com.google.gwtmockito;
 
-import com.google.gwtmockito.impl.ThreadLocalCleaner;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;

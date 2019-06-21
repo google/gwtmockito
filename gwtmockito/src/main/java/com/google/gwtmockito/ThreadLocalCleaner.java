@@ -1,4 +1,4 @@
-package com.google.gwtmockito.impl;
+package com.google.gwtmockito;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 /**
  * Utility classes to modify the private ThreadLocalMap attribute from the java.lang.Thread
  */
-public final class ThreadLocalCleaner {
+final class ThreadLocalCleaner {
 
     private ThreadLocalCleaner() {
         // Nothing
