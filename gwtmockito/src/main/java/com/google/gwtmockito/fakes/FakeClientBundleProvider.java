@@ -97,6 +97,9 @@ public class FakeClientBundleProvider implements FakeProvider<ClientBundle> {
               ((ResourceCallback<ResourcePrototype>) args[0]).onSuccess(
                   (ResourcePrototype) createFakeResource(resourceType, name));
               return null;
+            } else if (returnType.isInstance(proxy)) {
+              // for custom methods producing ResourcePrototype
+              return proxy;
             } else {
               throw new IllegalArgumentException(
                   "Unexpected return type for method " + method.getName());
