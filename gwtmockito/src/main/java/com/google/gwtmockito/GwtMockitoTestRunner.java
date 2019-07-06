@@ -376,6 +376,9 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
       super.run(wrapperNotifier);
     } finally {
       Thread.currentThread().setContextClassLoader(originalClassLoader);
+      if (unitTestClass.isAnnotationPresent(WithExperimentalGarbageCollection.class)) {
+        ThreadLocalCleaner.cleanUpThreadLocalValues(gwtMockitoClassLoader);
+      }
     }
   }
 
