@@ -87,7 +87,8 @@ public class FakeClientBundleProvider implements FakeProvider<ClientBundle> {
               return false;
             } else if (returnType == int.class) {
               return 0;
-            } else if (method.getParameterTypes()[0] == ResourceCallback.class) {
+            } else if (method.getParameterTypes().length > 0
+                && method.getParameterTypes()[0] == ResourceCallback.class) {
               // Read the underlying resource type out of the generic parameter
               // in the method's argument
               Class<?> resourceType = 
