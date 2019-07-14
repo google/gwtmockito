@@ -87,7 +87,8 @@ public class FakeClientBundleProvider implements FakeProvider<ClientBundle> {
               return false;
             } else if (returnType == int.class) {
               return 0;
-            } else if (method.getParameterTypes()[0] == ResourceCallback.class) {
+            } else if (method.getParameterTypes().length > 0
+                && method.getParameterTypes()[0] == ResourceCallback.class) {
               // Read the underlying resource type out of the generic parameter
               // in the method's argument
               Class<?> resourceType = 
@@ -97,6 +98,9 @@ public class FakeClientBundleProvider implements FakeProvider<ClientBundle> {
               ((ResourceCallback<ResourcePrototype>) args[0]).onSuccess(
                   (ResourcePrototype) createFakeResource(resourceType, name));
               return null;
+            } else if (returnType.isInstance(proxy)) {
+              // for custom methods producing ResourcePrototype
+              return proxy;
             } else {
               throw new IllegalArgumentException(
                   "Unexpected return type for method " + method.getName());

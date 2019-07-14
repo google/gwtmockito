@@ -412,6 +412,12 @@ public class GwtMockitoTest {
     assertEquals("externalText", result.toString());
   }
 
+  @Test
+  public void shouldMockCustomClientBundles() throws Exception {
+    SvgClientBundle clientBundle = GWT.create(SvgClientBundle.class);
+    assertTrue(clientBundle.icon().transform() instanceof DataResource);
+  }
+
   /**
    * This would fail if we didn't stub the create methods from DOM. See
    * https://github.com/google/gwtmockito/issues/4.
@@ -744,6 +750,14 @@ public class GwtMockitoTest {
     ExternalTextResource externalText();
     ImageResource image();
     TextResource text();
+  }
+
+  interface SvgResource extends DataResource {
+    SvgResource transform();
+  }
+
+  interface SvgClientBundle extends ClientBundle {
+    SvgResource icon();
   }
 
   enum SomeEnum {
