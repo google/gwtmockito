@@ -26,11 +26,14 @@ final class ThreadLocalCleaner {
                 if (mapEntry != null && mapEntry.get() != null) {
                     ClassLoader mapEntryKeyClassLoader = mapEntry.get().getClass().getClassLoader();
                     Field mapEntryValueField = getPrivateAttributeAccessibleField(mapEntry.getClass(), "value");
-                    ClassLoader mapEntryValueClassLoader = mapEntryValueField.get(mapEntry).getClass().getClassLoader();
-                    if (mapEntryKeyClassLoader == classLoader || mapEntryValueClassLoader == classLoader) {
-                        mapEntry.clear();
-                        mapEntryValueField.set(mapEntry, null);
-                        // The ThreadLocalMap is able to expunge the remaining stale entries, no need to remove it from the map
+                    Object value = mapEntryValueField.get(mapEntry);
+                    if (value != null) {
+                        ClassLoader mapEntryValueClassLoader = value.getClass().getClassLoader();
+                        if (mapEntryKeyClassLoader == classLoader || mapEntryValueClassLoader == classLoader) {
+                            mapEntry.clear();
+                            mapEntryValueField.set(mapEntry, null);
+                            // The ThreadLocalMap is able to expunge the remaining stale entries, no need to remove it from the map
+                        }
                     }
                 }
             }
