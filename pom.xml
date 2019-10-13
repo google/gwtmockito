@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.gwt.gwtmockito</groupId>
   <artifactId>gwtmockito-parent</artifactId>
-  <version>1.1.9-SNAPSHOT</version>
+  <version>1.1.9</version>
   <packaging>pom</packaging>
 
   <name>GwtMockito (Parent)</name>
@@ -30,6 +30,7 @@
     <connection>scm:git:git@github.com:google/gwtmockito.git</connection>
     <developerConnection>scm:git:git@github.com:google/gwtmockito.git</developerConnection>
     <url>git@github.com:google/gwtmockito.git</url>
+    <tag>gwtmockito-parent-1.1.9</tag>
   </scm>
 
   <developers>
