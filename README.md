@@ -231,7 +231,7 @@ section:
 <dependency>
   <groupId>com.google.gwt.gwtmockito</groupId>
   <artifactId>gwtmockito</artifactId>
-  <version>1.1.8</version>
+  <version>1.1.9</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -247,8 +247,13 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
 
 ## Version history
 
+### 1.1.9
+  * Support ResourcePrototype methods in fkae CLientBundles. (Thanks to zbynek)
+  * Add a `@WithExperimentalGarbageCollection` annotation. (Thanks to LudoP)
+  * Updated javassist dependency. (Thanks to TimvdLippe)
+
 ### 1.1.8
-  * Preliminary Java 9 support (Thanks to benoitf)
+  * Preliminary Java 9 support. (Thanks to benoitf)
 
 ### 1.1.7
   * Update GWT to version 2.8.0.
