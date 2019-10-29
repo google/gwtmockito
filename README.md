@@ -248,7 +248,7 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
 ## Version history
 
 ### 1.1.9
-  * Support ResourcePrototype methods in fkae CLientBundles. (Thanks to zbynek)
+  * Support ResourcePrototype methods in fake CLientBundles. (Thanks to zbynek)
   * Add a `@WithExperimentalGarbageCollection` annotation. (Thanks to LudoP)
   * Updated javassist dependency. (Thanks to TimvdLippe)
 
