@@ -24,6 +24,7 @@ import javassist.Loader;
 import javassist.LoaderClassPath;
 import javassist.NotFoundException;
 import javassist.Translator;
+import javassist.bytecode.AccessFlag;
 
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -433,8 +434,9 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
         throws NotFoundException, CannotCompileException {
       CtClass clazz = pool.get(name);
 
-      // Strip final modifiers from the class and all methods to allow them to be mocked
-      clazz.getClassFile().setAccessFlags(clazz.getModifiers() & ~Modifier.FINAL);
+      // Strip final accessFlag from the class and all methods to allow them to be mocked
+      clazz.getClassFile().setAccessFlags(clazz.getClassFile().getAccessFlags() & ~AccessFlag.FINAL);
+      
       for (CtMethod method : clazz.getDeclaredMethods()) {
         method.setModifiers(method.getModifiers() & ~Modifier.FINAL);
       }
