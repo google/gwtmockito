@@ -436,7 +436,6 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
 
       // Strip final accessFlag from the class and all methods to allow them to be mocked
       clazz.getClassFile().setAccessFlags(clazz.getClassFile().getAccessFlags() & ~AccessFlag.FINAL);
-      
       for (CtMethod method : clazz.getDeclaredMethods()) {
         method.setModifiers(method.getModifiers() & ~Modifier.FINAL);
       }
