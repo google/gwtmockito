@@ -17,7 +17,6 @@ package com.google.gwtmockito.impl;
 
 import javassist.CtMethod;
 
-import com.google.gwt.dev.util.collect.HashMap;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.SelectElement;
@@ -30,6 +29,7 @@ import org.mockito.Mockito;
 
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
