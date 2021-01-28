@@ -282,7 +282,7 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
   * Support for Cobertura coverage tools. (Thanks to mvmn)
   * Try to intelligently return the right value for getTagName when possible.
   * Fixed a classloader delegation issue. (Thanks to paulduffin)
-  * Add an annotation allowing the blacklist of classes that are always
+  * Add an annotation allowing the excludelist of classes that are always
     loaded via the standard classloader to be specified on a per-test bases.
 
 ### 1.1.3
