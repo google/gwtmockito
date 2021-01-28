@@ -365,7 +365,7 @@ public class GwtMockitoTest {
 
       @Override
       public void describeTo(Description description) {
-        description.appendText("dummy matcher");
+        description.appendText("fake matcher");
       }
     }));
   }
@@ -622,7 +622,7 @@ public class GwtMockitoTest {
   }
 
   @Test
-  public void shouldReturnDummyStringsFromURL() {
+  public void shouldReturnFakeStringsFromURL() {
     assertEquals("encodeQueryStringImpl", URL.encodeQueryString(""));
     assertEquals("encodePathSegmentImpl", URL.encodePathSegment(""));
   }
