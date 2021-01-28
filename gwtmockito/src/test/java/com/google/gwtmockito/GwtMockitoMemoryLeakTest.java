@@ -30,10 +30,10 @@ public class GwtMockitoMemoryLeakTest {
     }
 
     @RunWith(JUnit4.class)
-    public static class DummyTestClass {
+    public static class FakeTestClass {
 
         @Test
-        public void dummy() {
+        public void fake() {
         }
     }
 
@@ -41,7 +41,7 @@ public class GwtMockitoMemoryLeakTest {
     @WithExperimentalGarbageCollection
     public static class TestWithThreadLocal {
         @Test
-        public void dummy() {
+        public void fake() {
             ThreadLocalUsage threadLocalUsage = new ThreadLocalUsage();
         }
     }
