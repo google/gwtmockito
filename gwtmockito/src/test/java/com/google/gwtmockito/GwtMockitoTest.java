@@ -547,7 +547,7 @@ public class GwtMockitoTest {
 
   @Test
   public void assertThatShouldWork() {
-    // This fails when org.hamcrest isn't added to the package blacklist
+    // This fails when org.hamcrest isn't added to the package excludelist
     Assert.assertThat("123", CoreMatchers.containsString("12"));
   }
 
