@@ -45,7 +45,7 @@ public class GwtMockitoTestRunnerTest {
       throws InitializationError, ClassNotFoundException {
 
     // Runner should reload the test class in its own ClassLoader.
-    GwtMockitoTestRunner runner = new GwtMockitoTestRunner(DummyTestClass.class) {
+    GwtMockitoTestRunner runner = new GwtMockitoTestRunner(FakeTestClass.class) {
 
       @Override
       protected Collection<String> getPackagesToLoadViaStandardClassloader() {
@@ -58,7 +58,7 @@ public class GwtMockitoTestRunnerTest {
     // Assert that test class is loaded from a different class loader.
     TestClass testClass = runner.getTestClass();
     Class<?> javaClass = testClass.getJavaClass();
-    assertNotEquals(DummyTestClass.class, javaClass);
+    assertNotEquals(FakeTestClass.class, javaClass);
 
     // Create a child ClassLoader of the one used by Runner.
     ClassLoader gwtMockitoClassLoader = javaClass.getClassLoader();
@@ -76,10 +76,10 @@ public class GwtMockitoTestRunnerTest {
   }
 
   @RunWith(JUnit4.class)
-  public static class DummyTestClass {
+  public static class FakeTestClass {
 
     @Test
-    public void dummy() {
+    public void fake() {
     }
   }
 }
