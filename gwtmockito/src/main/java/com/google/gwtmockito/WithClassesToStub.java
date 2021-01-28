@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 /**
  * Annotation allowing the test to configure the set of classes that will be stubbed completely
  * when the test is executed. If a class is stubbed, all of its non-abstract methods (including
- * native and final methods) will be replaced with a no-op implementation that returns a dummy value
+ * native and final methods) will be replaced with a no-op implementation that returns a fake value
  * if needed. This stubbing takes place at the classloader level, so all instances of the class
  * created during the execution of the test will be stubbed. This can be a useful way to work around
  * dependencies that do things that aren't safe in unit tests, such as relying on the DOM API.
