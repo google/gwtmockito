@@ -47,21 +47,13 @@ public class StubGenerator {
       new HashMap<ClassAndMethod, StubMethod>();
   static {
     // Anchor.getElement must return an AnchorElement rather than a plain Element
-    STUB_METHODS.put(
-        new ClassAndMethod(Anchor.class, "getAnchorElement"),
-        new ReturnMockStubMethod(AnchorElement.class));
+    replaceMethodWithMock(Anchor.class, "getAnchorElement", AnchorElement.class);
     // ListBox.getSelectElement must return a SelectElement rather than a plain Element
-    STUB_METHODS.put(
-        new ClassAndMethod(ListBox.class, "getSelectElement"),
-        new ReturnMockStubMethod(SelectElement.class));
+    replaceMethodWithMock(ListBox.class, "getSelectElement", SelectElement.class);
     // TextBox.getInputElement must return an InputElement rather than a plain Element
-    STUB_METHODS.put(
-        new ClassAndMethod(TextBox.class, "getInputElement"),
-        new ReturnMockStubMethod(InputElement.class));
+    replaceMethodWithMock(TextBox.class, "getInputElement", InputElement.class);
     // InputElement needs to be able to convert generic elements into input elements
-    STUB_METHODS.put(
-        new ClassAndMethod(InputElement.class, "as"),
-        new ReturnMockStubMethod(InputElement.class));
+    replaceMethodWithMock(InputElement.class, "as", InputElement.class);
     // URL.encodeQueryStringImpl
     STUB_METHODS.put(
       new ClassAndMethod(URL.class, "encodeQueryStringImpl"),
@@ -70,6 +62,18 @@ public class StubGenerator {
     STUB_METHODS.put(
       new ClassAndMethod(URL.class, "encodePathSegmentImpl"),
       new ReturnStringStubMethod("encodePathSegmentImpl"));
+  }
+
+  /**
+   * Replaces implementation of any method (including static ones) with given name
+   * by a method that returns mocks of a target class.
+   * @param source class whose method should be replaced
+   * @param methodName method name
+   * @param target class of mocks to be returned
+   */
+  public static void replaceMethodWithMock(Class<?> source, String methodName, Class<?> target) {
+        STUB_METHODS.put(new ClassAndMethod(source, methodName),
+                new ReturnMockStubMethod(target));
   }
 
   /** Returns whether the behavior of the given method should be replaced. */
@@ -101,7 +105,6 @@ public class StubGenerator {
     if (STUB_METHODS.containsKey(new ClassAndMethod(className, methodName))) {
       return STUB_METHODS.get(new ClassAndMethod(className, methodName)).invoke();
     }
-
     // Otherwise return an appropriate basic type
     if (returnType == String.class) {
       return "";
