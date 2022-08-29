@@ -45,7 +45,7 @@ public class MyWidget extends Composite {
 
   public MyWidget(NumberFormatter formatter) {
     this.formatter = formatter;
-    initWidget(uiBinder.createAndBindUi(this);
+    initWidget(uiBinder.createAndBindUi(this));
   }
 
   void setNumber(int number) {
@@ -246,6 +246,9 @@ to manually install the jars for [Mockito][6] and [Javassist][7].
     [sample app][9].
 
 ## Version history
+
+### 1.2.0 [Unreleased]
+  * Use GWT 2.10.0 with relocated groupId
 
 ### 1.1.9
   * Support ResourcePrototype methods in fake CLientBundles. (Thanks to zbynek)
