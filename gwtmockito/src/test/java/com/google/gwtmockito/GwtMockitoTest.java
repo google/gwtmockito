@@ -86,7 +86,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatcher;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 
 import java.util.Date;
@@ -357,15 +358,10 @@ public class GwtMockitoTest {
   @Test
   public void shouldAllowArgumentMatchers() throws Exception {
     element.setClassName("classname");
-    verify(element).setClassName(Matchers.argThat(new BaseMatcher<String>() {
+    verify(element).setClassName(ArgumentMatchers.argThat(new ArgumentMatcher<String>() {
       @Override
-      public boolean matches(Object item) {
-        return item.toString().equals("classname");
-      }
-
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("fake matcher");
+      public boolean matches(String s) {
+        return s.equals("classname");
       }
     }));
   }

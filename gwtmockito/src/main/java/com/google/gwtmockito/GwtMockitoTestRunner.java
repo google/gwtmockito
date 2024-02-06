@@ -267,7 +267,7 @@ public class GwtMockitoTestRunner extends BlockJUnit4ClassRunner {
     packages.add("org.jacoco"); // To support JaCoCo code coverage tools
     packages.add("org.hamcrest"); // Since this package is referenced directly from org.junit
     packages.add("org.junit"); // Make sure the ParentRunner can recognize annotations like @Test
-    packages.add("org.mockito.cglib"); // To support Mockito 1
+//    packages.add("org.mockito.cglib"); // To support Mockito 1
 
     WithPackagesToLoadViaStandardClassLoader annotation = unitTestClass.getAnnotation(WithPackagesToLoadViaStandardClassLoader.class);
     if (annotation != null) {
